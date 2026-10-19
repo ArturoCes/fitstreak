@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Imágenes de los ejercicios y la fuente se descargan de internet. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Recordatorios: volver a programarlos tras reiniciar el móvil. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application

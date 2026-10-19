@@ -1,0 +1,194 @@
+{
+"Single-Arm_Cable_Crossover": [
+"Coloca las poleas en posición alta, elige la resistencia y agarra un asa con cada mano.",
+"Da un paso al frente, por delante de las dos poleas, con los brazos estirados delante y las manos juntas. Cabeza y pecho arriba, inclinado hacia delante y con un pie adelantado. Esta será tu posición inicial.",
+"Sin mover el brazo izquierdo, abre el derecho hacia el lado con el codo ligeramente flexionado, hasta que quede perpendicular al cuerpo, más o menos a la altura del hombro.",
+"Vuelve a la posición inicial llevando la mano de nuevo a la línea media del cuerpo.",
+"Aguanta un segundo en la posición inicial y repite con el otro lado. Sigue alternando hasta completar las repeticiones indicadas."
+],
+"Single-Arm_Linear_Jammer": [
+"Coloca una barra en un anclaje landmine o fija bien un extremo en una esquina. Cárgala con el peso adecuado.",
+"Levanta la barra del suelo y llévala al hombro con una o con las dos manos. Separa bien los pies. Esta será tu posición inicial.",
+"Haz el movimiento extendiendo el codo y empujando el peso hacia arriba. Muévete de forma explosiva, extendiendo del todo cadera y rodillas para generar la máxima fuerza.",
+"Vuelve a la posición inicial."
+],
+"Single-Arm_Push-Up": [
+"Empieza tumbado boca abajo en el suelo. Colócate apoyado en las puntas de los pies y un solo brazo, con la mano justo debajo del hombro y el brazo totalmente estirado. Las piernas, estiradas; probablemente necesites una base más ancha, con los pies más separados que en una flexión normal.",
+"Mantén una buena postura y lleva la mano libre a la espalda. Esta será tu posición inicial.",
+"Baja dejando que el codo se flexione hasta tocar el suelo.",
+"Baja despacio e invierte la dirección estirando el brazo para volver a la posición inicial."
+],
+"Single-Leg_High_Box_Squat": [
+"Coloca un cajón dentro de un rack y sujeta una banda o una cuerda por encima del cajón.",
+"De pie delante del cajón, súbete con una pierna hasta quedar totalmente de pie, dejando la otra pierna en el aire. Agárrate a la banda para mantener el equilibrio.",
+"Sigue subiendo y bajando con la misma pierna antes de cambiar al otro lado."
+],
+"Single-Leg_Leg_Extension": [
+"Siéntate en la máquina y ajústala para quedar bien colocado. El rodillo debe apoyarse en la parte baja de la espinilla sin tocar el tobillo. Ajusta el asiento para que el eje de giro quede alineado con la rodilla. Elige un peso adecuado a tu nivel.",
+"Con buena postura, estira del todo una pierna y haz una pausa arriba.",
+"Vuelve a la posición inicial sin dejar que el peso se apoye, manteniendo la tensión en el músculo.",
+"Repite las repeticiones que quieras."
+],
+"Single_Dumbbell_Raise": [
+"Con los pies bien separados, sujeta una mancuerna con las dos manos por uno de los discos en lugar de por el mango. Los brazos, estirados y colgando a la altura de la cintura. Esta será tu posición inicial.",
+"Sube el peso hasta que quede por encima de los hombros, con los brazos estirados. El torso y la cadera se quedan quietos durante todo el movimiento.",
+"Vuelve a la posición inicial y repite las repeticiones indicadas."
+],
+"Single_Leg_Glute_Bridge": [
+"Túmbate en el suelo con los pies apoyados y las rodillas flexionadas.",
+"Levanta una pierna del suelo llevando la rodilla al pecho. Esta será tu posición inicial.",
+"Haz el movimiento empujando con el talón, extendiendo la cadera hacia arriba y despegando los glúteos del suelo.",
+"Sube todo lo que puedas, haz una pausa y vuelve a la posición inicial."
+],
+"Sit-Up": [
+"Túmbate en el suelo con los pies sujetos bajo algo que no se mueva o con un compañero que te los sujete. Las piernas, flexionadas por las rodillas.",
+"Pon las manos detrás de la cabeza con los dedos entrelazados. Esta será tu posición inicial.",
+"Sube el tronco hasta formar una «V» imaginaria con los muslos. Exhala en esta parte del ejercicio.",
+"Tras notar la contracción un segundo, baja el tronco a la posición inicial mientras inhalas.",
+"Repite las repeticiones indicadas."
+],
+"Sled_Overhead_Backward_Walk": [
+"Engancha dos asas a un trineo con una cuerda o una cadena. Cárgalo con poco peso.",
+"De frente al trineo, retrocede hasta que la cuerda tenga algo de tensión. Sube las manos justo por encima de la cabeza con los codos estirados. Esta será tu posición inicial.",
+"Camina hacia atrás con los brazos por encima de la cabeza. Evita los tirones."
+],
+"Sled_Overhead_Triceps_Extension": [
+"Engancha dos asas a un trineo con una cadena o una cuerda. Cárgalo con el peso adecuado.",
+"De espaldas al trineo, aléjate hasta que la cuerda tenga tensión. Sube las manos por encima de la cabeza, juntas y con las palmas enfrentadas. Los codos, apuntando hacia arriba y flexionados. Esta será tu posición inicial.",
+"Extiende los codos para estirar los brazos. Mantén los brazos en su sitio para aislar los tríceps.",
+"Con los brazos estirados, da un paso adelante para volver a tensar la cuerda. Puedes adelantar un pie para tener más estabilidad."
+],
+"Sled_Reverse_Flye": [
+"Engancha dos asas a un trineo con una cuerda o una cadena. Cárgalo con poco peso.",
+"De frente al trineo, retrocede hasta que la cuerda tenga algo de tensión. Agarra las asas con los brazos estirados, más o menos a la altura de la cintura. Flexiona un poco las rodillas y mantén el pecho y la cabeza arriba. Esta será tu posición inicial.",
+"Sin flexionar los codos, tira de las asas hacia arriba y hacia fuera, haciendo un pájaro con algo de rotación externa. Las palmas deben mirar hacia delante al hacerlo.",
+"Vuelve a la posición inicial y retrocede un par de pasos para volver a tensar la cuerda."
+],
+"Sled_Row": [
+"Engancha dos asas a un trineo con una cuerda o una cadena. Cárgalo con el peso adecuado. De frente al trineo, retrocede hasta que la cuerda tenga algo de tensión.",
+"Con un asa en cada mano, flexiona un poco las rodillas, mantén la cabeza y el pecho arriba y empieza con los brazos estirados.",
+"Para empezar, flexiona los codos mientras retraes las escápulas, tirando del trineo hacia ti.",
+"Retrocede uno o dos pasos para volver a tensar la cuerda y repite."
+],
+"Smith_Incline_Shoulder_Raise": [
+"Coloca un banco inclinado bajo la máquina Smith y pon la barra a una altura que alcances tumbado con los brazos casi estirados. Con el peso elegido, túmbate en el banco con los hombros justo debajo de la barra.",
+"Con agarre prono (palmas hacia delante) a la anchura de los hombros, saca la barra del soporte y sostenla recta sobre ti con los codos ligeramente flexionados. Esta será tu posición inicial.",
+"Mientras exhalas, sube la barra hasta estirar del todo los brazos. Nota: la contracción debe notarse en los hombros.",
+"Tras una pausa de un segundo, baja la barra a la posición inicial mientras inhalas.",
+"Repite el movimiento las repeticiones indicadas.",
+"Al terminar, deja la barra en el soporte."
+],
+"Smith_Machine_Behind_the_Back_Shrug": [
+"Con la barra a la altura de los muslos, carga el peso adecuado.",
+"De espaldas a la barra, agárrala con agarre prono a la anchura de los hombros y desengánchala. Ponte recto, con la cabeza y el pecho arriba y los brazos estirados. Esta será tu posición inicial.",
+"Empieza encogiendo los hombros en línea recta hacia arriba. No flexiones los brazos ni las muñecas durante el movimiento.",
+"Tras una breve pausa, vuelve a la posición inicial.",
+"Repite las repeticiones que quieras antes de enganchar de nuevo la barra."
+],
+"Smith_Machine_Bench_Press": [
+"Coloca un banco plano bajo la máquina Smith y pon la barra a una altura que alcances tumbado con los brazos casi estirados. Con el peso elegido, túmbate en el banco. Con agarre prono más abierto que los hombros, desbloquea la barra y sostenla recta sobre ti con los brazos bloqueados. Esta será tu posición inicial.",
+"Mientras inhalas, baja despacio hasta notar la barra en la mitad del pecho.",
+"Tras una pausa de un segundo, sube la barra a la posición inicial mientras exhalas, empujando con el pecho. Bloquea los brazos arriba, aguanta un segundo y vuelve a bajar despacio. Consejo: deberías tardar al menos el doble en bajar que en subir.",
+"Repite el movimiento las repeticiones indicadas.",
+"Al terminar, vuelve a bloquear la barra en el soporte."
+],
+"Smith_Machine_Bent_Over_Row": [
+"Coloca la barra de la máquina Smith unos 5 cm por debajo de las rodillas.",
+"Flexiona un poco las rodillas e inclina el torso hacia delante desde la cadera, con la espalda recta, hasta que quede casi paralelo al suelo. Consejo: mantén la cabeza arriba.",
+"Agarra la barra con agarre prono y desbloquéala. Déjala colgar justo delante de ti, con los brazos estirados y perpendiculares al suelo y al torso. Esta será tu posición inicial.",
+"Sin mover el torso, sube la barra mientras exhalas, con los codos pegados al cuerpo y usando los antebrazos solo para sujetar el peso. Arriba, aprieta la espalda y aguanta un segundo.",
+"Baja despacio a la posición inicial mientras inhalas.",
+"Repite las repeticiones indicadas."
+],
+"Smith_Machine_Calf_Raise": [
+"Coloca un bloque o un disco bajo la barra de la máquina Smith. Pon la barra a la altura que mejor se ajuste a la tuya. Con la altura elegida y la barra cargada, súbete al disco con la parte delantera de los pies y apoya la barra en la parte alta de la espalda.",
+"Agarra la barra con las dos manos, palmas hacia delante, y gírala para desbloquearla. Esta será tu posición inicial.",
+"Sube los talones lo más alto que puedas empujando con la parte delantera de los pies y contrayendo los gemelos arriba. Las rodillas se quedan estiradas. Aguanta la contracción un segundo antes de bajar.",
+"Vuelve despacio a la posición inicial mientras inhalas, bajando los talones.",
+"Repite las repeticiones indicadas."
+],
+"Smith_Machine_Close-Grip_Bench_Press": [
+"Coloca un banco plano bajo la máquina Smith y pon la barra a una altura que alcances tumbado con los brazos casi estirados. Con el peso elegido, túmbate en el banco. Con agarre prono cerrado (palmas hacia delante), más o menos a la anchura de los hombros, desbloquea la barra y sostenla recta sobre ti con los brazos bloqueados. Esta será tu posición inicial.",
+"Mientras inhalas, baja despacio hasta notar la barra en la mitad del pecho. Consejo: a diferencia del press de banca normal, mantén siempre los codos pegados al torso para trabajar más los tríceps.",
+"Tras una pausa de un segundo, sube la barra a la posición inicial mientras exhalas, empujando con los tríceps. Bloquea los brazos arriba, aguanta un segundo y vuelve a bajar despacio. Consejo: deberías tardar al menos el doble en bajar que en subir.",
+"Repite el movimiento las repeticiones indicadas.",
+"Al terminar, vuelve a bloquear la barra en el soporte."
+],
+"Smith_Machine_Decline_Press": [
+"Coloca un banco declinado en la máquina de modo que la barra quede sobre el pecho. Carga el peso adecuado y túmbate en el banco.",
+"Gira la barra para desengancharla y estira del todo los brazos. La espalda, ligeramente arqueada, y las escápulas retraídas. Esta será tu posición inicial.",
+"Empieza flexionando los brazos y bajando la barra hasta el pecho.",
+"Haz una breve pausa y estira los brazos para volver a la posición inicial.",
+"Al terminar las repeticiones, gira la barra para engancharla."
+],
+"Smith_Machine_Hang_Power_Clean": [
+"Coloca la barra a la altura de las rodillas y cárgala con el peso adecuado.",
+"Agarra la barra con agarre prono más abierto que los hombros y desengánchala. Los brazos, totalmente estirados, con la cabeza y el pecho arriba. Los codos, hacia fuera, y los hombros atrás y abajo. La cadera, atrás, con tensión en los isquiotibiales. Esta será tu posición inicial.",
+"Empieza extendiendo con fuerza cadera y rodillas, acelerando la barra. Mantén los brazos estirados en esta parte del movimiento.",
+"Tras la extensión completa, vuelve a flexionar cadera y rodillas para recibir la barra más abajo.",
+"En ese momento, deja que los brazos se flexionen y gira los codos alrededor de la barra para recibirla sobre los hombros.",
+"Extiende cadera y rodillas hasta quedar de pie con la barra apoyada en los hombros para terminar el movimiento."
+],
+"Smith_Machine_Hip_Raise": [
+"Coloca un banco en la máquina y carga la barra con el peso adecuado. Túmbate en el banco y apoya las plantas de los pies contra la barra. Desbloquéala y estira las piernas; puede que necesites ayudarte con las manos. Para tener más estabilidad, agárrate a los laterales de la máquina. Esta será tu posición inicial.",
+"Empieza basculando la pelvis y flexionando la columna para despegar la cadera del banco. Mantén las rodillas ligeramente flexionadas durante todo el movimiento.",
+"Tras una breve pausa, vuelve a apoyar la cadera en el banco.",
+"Repite las repeticiones que quieras."
+],
+"Smith_Machine_Incline_Bench_Press": [
+"Coloca un banco inclinado bajo la máquina Smith y pon la barra a una altura que alcances tumbado con los brazos casi estirados. Con el peso elegido, túmbate en el banco con la parte alta del pecho alineada con la barra. Con agarre prono (palmas hacia delante) más abierto que los hombros, desbloquea la barra y sostenla recta sobre ti con los brazos bloqueados. Esta será tu posición inicial.",
+"Mientras inhalas, baja despacio hasta notar la barra en la parte alta del pecho.",
+"Tras una pausa de un segundo, sube la barra a la posición inicial mientras exhalas, empujando con el pecho. Bloquea los brazos arriba, aguanta un segundo y vuelve a bajar despacio. Consejo: deberías tardar al menos el doble en bajar que en subir.",
+"Repite el movimiento las repeticiones indicadas.",
+"Al terminar, deja la barra en el soporte."
+],
+"Smith_Machine_Leg_Press": [
+"Coloca la barra de una máquina Smith a unos 60 cm del suelo, apoyada en los seguros. Carga el peso adecuado y túmbate debajo. Apoya la mitad de los pies en la barra, con las rodillas hacia el pecho. Esta será tu posición inicial.",
+"Empieza empujando con los pies para subir la barra, extendiendo cadera y rodillas. No bloquees las rodillas.",
+"Arriba, haz una breve pausa antes de volver a la posición inicial."
+],
+"Smith_Machine_One-Arm_Upright_Row": [
+"Con la barra a la altura de los muslos, carga el peso adecuado.",
+"Agarra la barra con agarre abierto, desengánchala y suelta la otra mano. El brazo, estirado, y de pie, recto, con la cabeza y el pecho arriba. Esta será tu posición inicial.",
+"Empieza flexionando el codo y subiendo el brazo con el codo hacia fuera, hasta que el brazo quede paralelo al suelo.",
+"Tras una breve pausa, vuelve a la posición inicial.",
+"Repite las repeticiones que quieras antes de enganchar de nuevo la barra."
+],
+"Smith_Machine_Overhead_Shoulder_Press": [
+"Para empezar, coloca un banco plano (mejor con respaldo) bajo la máquina Smith. Pon la barra a una altura que, sentado, solo alcances con los brazos casi estirados.",
+"Con la altura correcta, siéntate un poco por detrás de la barra, de modo que haya una línea recta imaginaria entre la punta de la nariz y la barra. Los pies, fijos. Agarra la barra con las palmas hacia delante, desbloquéala y súbela hasta estirar los brazos. Esta será tu posición inicial.",
+"Baja despacio la barra hasta la altura de la barbilla mientras inhalas.",
+"Sube la barra a la posición inicial con los hombros mientras exhalas.",
+"Repite las repeticiones indicadas."
+],
+"Smith_Machine_Pistol_Squat": [
+"Para empezar, coloca la barra a la altura que mejor se ajuste a la tuya. Métete debajo y apóyala en la parte alta de la espalda.",
+"Agarra la barra con las palmas hacia delante, desbloquéala y sácala del soporte estirando las piernas.",
+"Adelanta un pie unos 30 cm respecto a la barra. Estira la otra pierna al frente, sin apoyarla en el suelo. Mira siempre al frente y mantén la columna neutra o ligeramente arqueada. Esta será tu posición inicial.",
+"Con buena postura, baja flexionando rodilla y cadera todo lo que te permita tu flexibilidad.",
+"Haz una breve pausa abajo y vuelve a la posición inicial empujando con el talón, extendiendo rodilla y cadera."
+],
+"Smith_Machine_Reverse_Calf_Raises": [
+"Ajusta la barra de la máquina Smith a tu altura y coloca una plataforma elevada justo debajo.",
+"Súbete a la plataforma con los talones apoyados encima y la parte delantera de los pies fuera. Las puntas, al frente, con los pies a la anchura de los hombros.",
+"Con los pies así colocados, mete los hombros bajo la barra y súbela extendiendo cadera y rodillas hasta quedar erguido. Las rodillas, algo flexionadas, nunca bloqueadas. Esta será tu posición inicial. Consejo: la barra en la espalda solo sirve para mantener el equilibrio.",
+"Sube la parte delantera de los pies mientras exhalas, llevando las puntas lo más arriba posible y contrayendo la parte delantera de la pierna. Las rodillas deben quedar siempre inmóviles, sin flexionarse. Aguanta la contracción un segundo antes de bajar.",
+"Vuelve despacio a la posición inicial mientras inhalas, bajando la parte delantera de los pies.",
+"Repite las repeticiones indicadas."
+],
+"Smith_Machine_Squat": [
+"Para empezar, coloca la barra a la altura que mejor se ajuste a la tuya. Con la altura elegida y la barra cargada, métete debajo y apóyala en la parte alta de la espalda (un poco por debajo del cuello).",
+"Sujeta la barra con ambas manos (palmas hacia delante), desbloquéala y sácala del soporte empujando con las piernas a la vez que enderezas el torso.",
+"Separa los pies a la anchura de los hombros, con las puntas ligeramente hacia fuera. Mantén siempre la cabeza arriba y la espalda recta. Esta será tu posición inicial. (Nota: aquí usamos esta postura media, que trabaja la pierna de forma general, pero puedes usar otras aperturas de pies).",
+"Baja la barra despacio flexionando las rodillas, con la postura recta y la cabeza arriba. Sigue hasta que el ángulo entre muslo y gemelo sea algo menor de 90 grados (los muslos por debajo de la paralela). Inhala durante esta parte del movimiento. Consejo: si lo haces bien, la parte delantera de las rodillas queda en línea con las puntas de los pies. Si las rodillas pasan de esa línea, estás cargando demasiado la rodilla y la técnica no es correcta.",
+"Sube la barra mientras exhalas, empujando el suelo con los talones y estirando las piernas hasta la posición inicial.",
+"Repite las repeticiones indicadas."
+],
+"Smith_Machine_Stiff-Legged_Deadlift": [
+"Para empezar, coloca la barra de la máquina Smith más o menos a mitad de los muslos. Con la altura elegida y la barra cargada, agárrala con agarre prono (palmas hacia delante) a la anchura de los hombros. Si usas mucho peso, puede que necesites correas.",
+"Sube la barra estirando del todo los brazos con la espalda recta. Ponte de pie con el torso recto y los pies a la anchura de los hombros o algo más juntos. Las rodillas, ligeramente flexionadas. Esta será tu posición inicial.",
+"Sin mover las rodillas, baja la barra hasta la altura de los pies inclinándote desde la cadera con la espalda recta. Sigue bajando como si fueras a coger algo del suelo, hasta notar estiramiento en los isquiotibiales. Inhala al hacerlo.",
+"En cuanto notes el estiramiento, vuelve a subir el torso extendiendo la cadera hasta la posición inicial. Exhala al hacerlo.",
+"Repite las repeticiones indicadas."
+]
+}

@@ -72,7 +72,13 @@ final catalogFilterProvider =
 
 final filteredExercisesProvider = Provider<AsyncValue<List<Exercise>>>((ref) {
   final filter = ref.watch(catalogFilterProvider);
-  return ref
-      .watch(exercisesProvider)
-      .whenData((all) => all.where(filter.matches).toList());
+  final drawingsFirst = ref.watch(preferDrawingsProvider);
+  return ref.watch(exercisesProvider).whenData((all) {
+    final list = all.where(filter.matches).toList();
+    // En modo dibujos, primero los que lo tienen (el orden alfabético se
+    // mantiene dentro de cada grupo).
+    return drawingsFirst
+        ? [...list.where((e) => e.drawings.isNotEmpty), ...list.where((e) => e.drawings.isEmpty)]
+        : list;
+  });
 });

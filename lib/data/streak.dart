@@ -147,6 +147,39 @@ class StreakState {
   }
 }
 
+/// Una serie hecha: repeticiones (o segundos en ejercicios estáticos) y peso.
+class SetLog {
+  const SetLog({required this.reps, this.weightKg});
+
+  final int reps;
+
+  /// null en ejercicios sin carga (peso corporal, bandas...).
+  final double? weightKg;
+
+  Map<String, dynamic> toJson() => {'reps': reps, if (weightKg != null) 'kg': weightKg};
+
+  factory SetLog.fromJson(Map<String, dynamic> j) =>
+      SetLog(reps: j['reps'] as int, weightKg: (j['kg'] as num?)?.toDouble());
+}
+
+/// Las series de un ejercicio dentro de un entreno.
+class ExerciseLog {
+  const ExerciseLog({required this.exerciseId, required this.sets});
+
+  final String exerciseId;
+  final List<SetLog> sets;
+
+  Map<String, dynamic> toJson() => {
+        'id': exerciseId,
+        'sets': [for (final s in sets) s.toJson()],
+      };
+
+  factory ExerciseLog.fromJson(Map<String, dynamic> j) => ExerciseLog(
+        exerciseId: j['id'] as String,
+        sets: [for (final s in j['sets'] as List) SetLog.fromJson(s as Map<String, dynamic>)],
+      );
+}
+
 /// Registro de un entreno terminado.
 class WorkoutLog {
   const WorkoutLog({
@@ -156,6 +189,7 @@ class WorkoutLog {
     required this.setsDone,
     required this.setsTotal,
     required this.durationSeconds,
+    this.exercises = const [],
   });
 
   final DateTime date;
@@ -165,6 +199,10 @@ class WorkoutLog {
   final int setsTotal;
   final int durationSeconds;
 
+  /// Series hechas por ejercicio (vacío en entrenos guardados antes de
+  /// registrar repeticiones y peso).
+  final List<ExerciseLog> exercises;
+
   Map<String, dynamic> toJson() => {
         'date': date.toIso8601String(),
         'dayIndex': dayIndex,
@@ -172,6 +210,7 @@ class WorkoutLog {
         'setsDone': setsDone,
         'setsTotal': setsTotal,
         'durationSeconds': durationSeconds,
+        'exercises': [for (final e in exercises) e.toJson()],
       };
 
   factory WorkoutLog.fromJson(Map<String, dynamic> j) => WorkoutLog(
@@ -181,5 +220,9 @@ class WorkoutLog {
         setsDone: j['setsDone'] as int,
         setsTotal: j['setsTotal'] as int,
         durationSeconds: j['durationSeconds'] as int,
+        exercises: [
+          for (final e in j['exercises'] as List? ?? const [])
+            ExerciseLog.fromJson(e as Map<String, dynamic>),
+        ],
       );
 }

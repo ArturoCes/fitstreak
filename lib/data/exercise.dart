@@ -13,7 +13,14 @@ class Exercise {
     this.force,
     this.mechanic,
     this.equipment,
+    this.drawings = const [],
+    this.instructionsEs = const [],
   });
+
+  /// Dibujos de Everkinetic (CC BY-SA 4.0), emparejados por nombre.
+  /// https://github.com/everkinetic/data
+  static const drawingBaseUrl =
+      'https://raw.githubusercontent.com/everkinetic/data/main/dist/png/';
 
   /// Mientras no tengamos almacenamiento propio, las imágenes se sirven
   /// desde el repo original.
@@ -35,9 +42,34 @@ class Exercise {
   /// Sin equipo especificado lo tratamos como peso corporal.
   String get equipmentOrBody => equipment ?? 'body only';
 
+  /// Posición inicial y final del dibujo; vacío si no hay dibujo para este.
+  final List<String> drawings;
+
+  /// Instrucciones traducidas (tool/i18n_es); vacío si falta la traducción.
+  final List<String> instructionsEs;
+
+  /// Pasos a mostrar: en español si existen, si no el original. Sin vacíos.
+  List<String> get steps => [
+        for (final s in instructionsEs.isNotEmpty ? instructionsEs : instructions)
+          if (s.trim().isNotEmpty) s,
+      ];
+
   List<String> get imageUrls => [for (final i in images) '$imageBaseUrl$i'];
 
-  factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
+  List<String> get drawingUrls => [for (final d in drawings) '$drawingBaseUrl$d'];
+
+  /// Las imágenes a mostrar según la preferencia, con las fotos como respaldo.
+  List<String> urlsFor({required bool drawings}) =>
+      drawings && this.drawings.isNotEmpty ? drawingUrls : imageUrls;
+
+  factory Exercise.fromJson(
+    Map<String, dynamic> json, {
+    List<String> drawings = const [],
+    List<String> instructionsEs = const [],
+  }) =>
+      Exercise(
+        drawings: drawings,
+        instructionsEs: instructionsEs,
         id: json['id'] as String,
         name: json['name'] as String,
         level: json['level'] as String,

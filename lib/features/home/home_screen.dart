@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/app_state.dart';
 import '../../data/progress_state.dart';
 import '../catalog/catalog_screen.dart';
+import '../progress/progress_screen.dart';
 import '../routine/routine_screen.dart';
 import '../streak/streak_screen.dart';
 
@@ -35,13 +36,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _tab,
-        children: const [RoutineScreen(), StreakScreen(), CatalogScreen()],
+        children: const [RoutineScreen(), ProgressScreen(), StreakScreen(), CatalogScreen()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
         destinations: [
           const NavigationDestination(icon: Icon(Icons.event_note), label: 'Rutina'),
+          const NavigationDestination(icon: Icon(Icons.insights), label: 'Progreso'),
           NavigationDestination(
             icon: Badge(isLabelVisible: atRisk, child: const Icon(Icons.local_fire_department)),
             label: 'Racha',
