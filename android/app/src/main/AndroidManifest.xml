@@ -1,16 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Imágenes de los ejercicios y la fuente se descargan de internet. -->
+    <!-- Exercise images are downloaded; routine sharing uses Supabase. -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Recordatorios: volver a programarlos tras reiniciar el móvil. -->
+    <!-- Reminders: schedule them again after the phone restarts. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!-- Burbuja del temporizador sobre otras apps (el usuario la activa a mano). -->
-    <!-- Campanita del fin del descanso a su hora exacta, aunque el móvil esté bloqueado. -->
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32"/>
+    <!-- Rest-end chime at the exact time, even with the phone locked. Not
+         USE_EXACT_ALARM: Google Play only allows it for alarm and calendar apps.
+         Granted on Android 12-13; on 14+ the user allows it in the settings,
+         otherwise the app's own timer rings it. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <!-- Timer bubble over other apps (the user turns it on by hand). -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <!-- Health Connect: pasos y calorías del reloj, comida de Fitia y entrenos de FitStreak. -->
+    <!-- Health Connect: steps and calories from the watch, food from Fitia and FitStreak workouts. -->
     <uses-permission android:name="android.permission.health.READ_STEPS"/>
     <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED"/>
     <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"/>
@@ -43,34 +45,34 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- Los enlaces los abre SharedTextReceiver, no el router de Flutter. -->
+            <!-- Links are handled by SharedTextReceiver, not the Flutter router. -->
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false"/>
-            <!-- Enlace de rutina publicada (la función r de Supabase redirige aquí). -->
+            <!-- Published routine link (the Supabase r function redirects here). -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="fitstreak" android:host="r"/>
             </intent-filter>
-            <!-- Resumen de hoy / análisis semanal (atajos del icono y voz). -->
+            <!-- Today's summary / weekly analysis (icon shortcuts and voice). -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="fitstreak" android:host="summary"/>
             </intent-filter>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts"/>
-            <!-- Health Connect abre esto para explicar para qué se usan los datos. -->
+            <!-- Health Connect opens this to explain what the data is used for. -->
             <intent-filter>
                 <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"/>
             </intent-filter>
-            <!-- "Compartir → FitStreak" desde WhatsApp, notas...: abre Importar rutina. -->
+            <!-- "Share → FitStreak" from WhatsApp, notes...: opens Import routine. -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
-        <!-- Android 14+: el enlace "uso de permisos" de Health Connect abre la app. -->
+        <!-- Android 14+: the Health Connect "permission usage" link opens the app. -->
         <activity-alias
             android:name="ViewPermissionUsageActivity"
             android:exported="true"
@@ -90,7 +92,7 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
-        <!-- Widget de racha en la pantalla de inicio. -->
+        <!-- Home screen streak widget. -->
         <receiver android:name=".StreakWidgetProvider" android:exported="false" android:label="Racha FitStreak">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -117,11 +119,11 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
-        <!-- Voz para leer el resumen (flutter_tts). -->
+        <!-- Text-to-speech to read the summary (flutter_tts). -->
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE"/>
         </intent>
-        <!-- Saber si Health Connect está instalado. -->
+        <!-- Know whether Health Connect is installed. -->
         <package android:name="com.google.android.apps.healthdata"/>
         <intent>
             <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"/>

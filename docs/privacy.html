@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FitStreak · Política de privacidad</title>
+<style>
+  :root { --bg: #fbfaff; --fg: #1d1832; --muted: #5d5678; --accent: #12a594; --card: #ffffff; --line: #e7e3f3; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #14111f; --fg: #eeeaf8; --muted: #a9a2c4; --accent: #3fd1bd; --card: #1d1930; --line: #2e2945; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  h2 { font-size: 1.25rem; margin: 32px 0 8px; color: var(--accent); }
+  p, li { color: var(--fg); }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  a { color: var(--accent); }
+  nav a { margin-right: 12px; }
+</style>
+</head>
+<body>
+<main>
+<nav class="muted"><a href="#es">Español</a><a href="#en">English</a></nav>
+
+<section id="es">
+<h1>Política de privacidad de FitStreak</h1>
+<p class="muted">Última actualización: 25 de octubre de 2026</p>
+
+<p>FitStreak es una app para seguir rutinas de entrenamiento y mantener una racha. Está hecha por un desarrollador independiente (Arturo C.). Esta página explica qué datos usa la app, dónde se guardan y cómo borrarlos.</p>
+
+<div class="card">
+<p><strong>En resumen:</strong> casi todo se queda en tu móvil. No hay anuncios, ni analíticas, ni se venden o comparten datos con terceros. Solo sale de tu móvil lo que tú decides publicar (una rutina) y, si quieres, tu email para no perderla.</p>
+</div>
+
+<h2>1. Datos que se guardan solo en tu móvil</h2>
+<ul>
+  <li><strong>Perfil:</strong> sexo, edad, altura, peso, objetivo, nivel, días por semana, material disponible y lesiones. Sirven para crear la rutina y calcular las calorías aproximadas.</li>
+  <li><strong>Entrenos:</strong> tu rutina, el historial de series, la racha, los protectores y los ajustes.</li>
+  <li><strong>Imagen de motivación</strong> (opcional): la foto que elijas de tu galería se copia dentro de la app y no se sube a ningún sitio.</li>
+</ul>
+<p>Estos datos no salen del dispositivo. Si desinstalas la app o usas «Opciones → Borrar todos los datos», desaparecen.</p>
+
+<h2>2. Health Connect</h2>
+<p>Si lo activas, FitStreak usa Health Connect de Android:</p>
+<ul>
+  <li><strong>Lee</strong> pasos, calorías quemadas (activas y totales), nutrición (calorías comidas, por ejemplo las que apunta Fitia) y sesiones de ejercicio, solo del día de hoy, para mostrarte cuánto has comido y gastado frente a tu meta.</li>
+  <li><strong>Escribe</strong> los entrenos que terminas en FitStreak (tipo, duración y calorías estimadas) para que otras apps de salud los vean.</li>
+</ul>
+<p>Los datos de Health Connect se usan únicamente para mostrarte esa información dentro de la app. No se envían a ningún servidor, no se usan para publicidad, no se venden ni se comparten con nadie, y ninguna persona los lee. Puedes retirar los permisos cuando quieras desde los ajustes de Health Connect.</p>
+<p>El uso que hace FitStreak de la información recibida de Health Connect cumple la <a href="https://support.google.com/googleplay/android-developer/answer/9888170">Política de Datos de Usuario de Google Play</a>, incluidos los requisitos de uso limitado.</p>
+
+<h2>3. Compartir y publicar rutinas (opcional)</h2>
+<p>Si publicas tu rutina o sigues la de otra persona, la app usa <a href="https://supabase.com/privacy">Supabase</a> como servidor:</p>
+<table>
+  <tr><th>Dato</th><th>Para qué</th></tr>
+  <tr><td>Identificador de cuenta anónima</td><td>Saber qué rutina es tuya y cuál sigues. Se crea solo al publicar o seguir.</td></tr>
+  <tr><td>Nombre de autor que escribas, título y contenido de la rutina</td><td>Que otras personas con el código puedan verla y seguirla. Solo sale en el buscador si activas «Que aparezca en el buscador».</td></tr>
+  <tr><td>A quién sigues</td><td>Avisarte de versiones nuevas y contar seguidores (solo se muestra el número).</td></tr>
+  <tr><td>Email (opcional)</td><td>Recuperar tu rutina publicada en otro móvil. Se usa solo para enviarte el código de acceso.</td></tr>
+</table>
+<p>Tu perfil, tu historial y tus datos de salud nunca se suben.</p>
+<p>Cuando compartes una rutina, la app abre el menú de compartir de Android y tú eliges a quién se la mandas.</p>
+
+<h2>4. Otros servicios</h2>
+<ul>
+  <li>Las fotos de los ejercicios se descargan de GitHub (proyectos <em>free-exercise-db</em> y <em>Everkinetic</em>). Como cualquier descarga web, GitHub puede ver tu dirección IP.</li>
+  <li>Los recordatorios, el resumen leído en voz alta y el widget funcionan dentro del móvil, sin servidores.</li>
+</ul>
+
+<h2 id="borrar">5. Borrar tus datos y tu cuenta</h2>
+<ul>
+  <li><strong>Desde la app:</strong> «Opciones → Borrar todos los datos». Borra todo lo que hay en el móvil y, si publicaste una rutina o guardaste tu email, también tu cuenta, tus rutinas publicadas y a quién sigues en el servidor.</li>
+  <li><strong>Sin la app:</strong> escribe a <a href="mailto:arturoc200212@gmail.com?subject=FitStreak%20-%20Borrar%20cuenta">arturoc200212@gmail.com</a> con el código de tu rutina (FS-…) o el email de tu cuenta. Se borrarán la cuenta y todos sus datos del servidor en un máximo de 30 días.</li>
+</ul>
+<p>No se guardan copias de los datos borrados.</p>
+
+<h2>6. Menores</h2>
+<p>FitStreak no está dirigida a menores de 13 años.</p>
+
+<h2>7. Cambios y contacto</h2>
+<p>Si esta política cambia, se actualizará esta página y la fecha de arriba. Para cualquier duda: <a href="mailto:arturoc200212@gmail.com">arturoc200212@gmail.com</a>.</p>
+</section>
+
+<hr style="border:0;border-top:1px solid var(--line);margin:48px 0">
+
+<section id="en" lang="en">
+<h1>FitStreak Privacy Policy</h1>
+<p class="muted">Last updated: October 25, 2026</p>
+
+<p>FitStreak is an app to follow workout routines and keep a streak, made by an independent developer (Arturo C.).</p>
+
+<div class="card">
+<p><strong>In short:</strong> almost everything stays on your phone. No ads, no analytics, no data sold or shared with third parties. Only what you choose to publish (a routine) and, optionally, your email leave your phone.</p>
+</div>
+
+<h2>1. Data stored only on your phone</h2>
+<p>Profile (sex, age, height, weight, goal, level, schedule, equipment, injuries), routine, workout history, streak, settings and an optional motivation picture. They never leave the device and are removed by uninstalling or with "Opciones → Borrar todos los datos".</p>
+
+<h2>2. Health Connect</h2>
+<p>If you enable it, FitStreak <strong>reads</strong> today's steps, calories burned (active and total), nutrition (calories eaten, e.g. logged by Fitia) and exercise sessions to show your intake and expenditure against your goal, and <strong>writes</strong> the workouts you finish (type, duration and estimated calories). This data is only shown inside the app: it is never sent to any server, used for advertising, sold or shared, and no person reads it. You can revoke access at any time in Health Connect.</p>
+<p>FitStreak's use of information received from Health Connect adheres to the <a href="https://support.google.com/googleplay/android-developer/answer/9888170">Google Play User Data policy</a>, including the Limited Use requirements.</p>
+
+<h2>3. Sharing and publishing routines (optional)</h2>
+<p>Publishing or following a routine uses <a href="https://supabase.com/privacy">Supabase</a>: an anonymous account id, the author name you type, the routine's title and content, which routine you follow, and optionally your email (only to send you sign-in codes). Your profile, history and health data are never uploaded.</p>
+
+<h2>4. Other services</h2>
+<p>Exercise pictures are downloaded from GitHub (free-exercise-db and Everkinetic), which may see your IP address like any web request.</p>
+
+<h2>5. Deleting your data and account</h2>
+<p>In the app: "Opciones → Borrar todos los datos" deletes everything on the phone and, if you published or saved an email, your account, published routines and follows on the server. Without the app: email <a href="mailto:arturoc200212@gmail.com?subject=FitStreak%20-%20Delete%20account">arturoc200212@gmail.com</a> with your routine code (FS-…) or account email; the account and its data are deleted within 30 days.</p>
+
+<h2>6. Children</h2>
+<p>FitStreak is not directed at children under 13.</p>
+
+<h2>7. Changes and contact</h2>
+<p>Changes will be posted on this page. Contact: <a href="mailto:arturoc200212@gmail.com">arturoc200212@gmail.com</a>.</p>
+</section>
+</main>
+</body>
+</html>

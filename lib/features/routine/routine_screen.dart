@@ -393,7 +393,9 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
             title: const Text('¿Borrar todo?'),
             content: const Text(
               'Se borrarán tu perfil, la rutina, la racha y los protectores, el historial '
-              'de entrenos y los gráficos, el entreno en curso, los recordatorios y tus ajustes.\n\n'
+              'de entrenos y los gráficos, el entreno en curso, los recordatorios y tus ajustes. '
+              'Si publicaste una rutina o guardaste tu email, también se borran tu cuenta y '
+              'tus rutinas publicadas.\n\n'
               'No se puede deshacer.',
             ),
             actions: [

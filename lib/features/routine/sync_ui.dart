@@ -170,7 +170,7 @@ Future<void> _showCode(BuildContext context, WidgetRef ref, String id) => showDi
     );
 
 /// Sheet of my published routine: code, followers, search listing,
-/// upload changes and stop publishing.
+/// upload changes and rename.
 class _PublishedSheet extends ConsumerStatefulWidget {
   /// Creates the sheet.
   const _PublishedSheet({required this.parentContext});

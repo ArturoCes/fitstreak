@@ -167,3 +167,18 @@ $$;
 
 revoke all on function public.search_routines(text, integer) from public;
 grant execute on function public.search_routines(text, integer) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Account deletion (required by Google Play): "Borrar todos los datos" in the
+-- app deletes the user; routines and follows go with it (on delete cascade).
+create or replace function public.delete_my_account()
+returns void
+language sql
+security definer
+set search_path = ''
+as $$
+  delete from auth.users where id = auth.uid();
+$$;
+
+revoke all on function public.delete_my_account() from public, anon;
+grant execute on function public.delete_my_account() to authenticated;

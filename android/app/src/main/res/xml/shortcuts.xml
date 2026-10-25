@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Atajos al mantener pulsado el icono. Google Assistant / Bixby también
-     pueden abrirlos por voz ("abre Resumen de hoy en FitStreak"). -->
+<!-- Shortcuts when long-pressing the icon. Google Assistant / Bixby can also
+     open them by voice ("abre Resumen de hoy en FitStreak"). -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:shortcutId="summary_today"

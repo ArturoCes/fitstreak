@@ -6,6 +6,7 @@ import 'active_workout.dart';
 import 'app_state.dart';
 import 'motivation.dart';
 import 'progress_state.dart';
+import 'sync/sync_state.dart';
 
 /// Rebuilds the whole tree (and with it every provider) so the app starts
 /// as if freshly installed, without closing it.
@@ -35,10 +36,25 @@ class _AppRestarterState extends State<AppRestarter> {
   Widget build(BuildContext context) => KeyedSubtree(key: _key, child: Builder(builder: widget.builder));
 }
 
-/// Deletes profile, routine, streak, history, workout in progress, settings,
-/// reminders and custom image, then restarts into the onboarding.
+/// Deletes the online account (published routines, follows, email), then
+/// profile, routine, streak, history, workout in progress, settings,
+/// reminders and custom image, and restarts into the onboarding.
 Future<void> wipeAllData(BuildContext context, WidgetRef ref) async {
-  // First what lives outside the preferences.
+  // The online account (published routines, follows, email) goes first: if
+  // that fails nothing is deleted, so it can be retried with a connection.
+  try {
+    await ref.read(routineSyncApiProvider).deleteAccount();
+  } catch (e) {
+    debugPrint('No se pudo borrar la cuenta: $e');
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('No se pudo borrar tu cuenta online. Revisa la conexión y vuelve a intentarlo.'),
+      ));
+    }
+    return;
+  }
+  if (!context.mounted) return;
+  // Then what lives outside the preferences.
   ref.read(activeWorkoutProvider.notifier).abandon();
   await ref.read(motivationProvider.notifier).clearImage();
   try {

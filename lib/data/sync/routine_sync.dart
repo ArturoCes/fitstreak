@@ -246,4 +246,8 @@ abstract class RoutineSyncApi {
 
   /// Removes the current user from the followers of routine [id].
   Future<void> unfollow(String id);
+
+  /// Deletes the current user's account with their published routines and
+  /// follows, then signs out. Does nothing if never signed in.
+  Future<void> deleteAccount();
 }

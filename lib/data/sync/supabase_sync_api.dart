@@ -110,6 +110,16 @@ class SupabaseRoutineSyncApi implements RoutineSyncApi {
     if (_auth.currentUser == null) return;
     await _client.from('follows').delete().eq('routine_id', id);
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    if (_auth.currentUser == null) return;
+    // Deleting the user cascades to its routines and follows.
+    await _client.rpc('delete_my_account');
+    try {
+      await _auth.signOut(scope: SignOutScope.local);
+    } catch (_) {}
+  }
 }
 
 /// Optional email account: keeps the anonymous account so the published

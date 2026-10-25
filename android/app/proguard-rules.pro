@@ -1,18 +1,18 @@
-# shared_preferences_android llama a su código Kotlin desde Dart por JNI
-# (jnigen). R8 no ve esas llamadas y elimina los métodos, así que en release
-# la app se quedaba colgada en el logo con NoSuchMethodError al leer los datos.
+# shared_preferences_android calls its Kotlin code from Dart over JNI
+# (jnigen). R8 doesn't see those calls and strips the methods, so in release
+# the app hung on the logo with NoSuchMethodError when reading the data.
 -keep class io.flutter.plugins.sharedpreferences.** { *; }
 
-# Las firmas JNI incluyen tipos de Kotlin (p. ej. getAll(..., Continuation)):
-# si R8 los renombra, la firma deja de coincidir y vuelve el NoSuchMethodError.
-# El puente también busca por nombre kotlin.Result, kotlin.Unit, etc., así que
-# se conserva todo el runtime de Kotlin.
+# JNI signatures include Kotlin types (e.g. getAll(..., Continuation)): if R8
+# renames them the signature stops matching and the NoSuchMethodError returns.
+# The bridge also looks up kotlin.Result, kotlin.Unit, etc. by name, so the
+# whole Kotlin runtime is kept.
 -keep class kotlin.** { *; }
 -keep class kotlinx.coroutines.** { *; }
 
-# Runtime del paquete jni que usan esos puentes.
+# Runtime of the jni package those bridges use.
 -keep class com.github.dart_lang.jni.** { *; }
 
-# Health Connect: el plugin crea los registros por reflexión/nombre de clase.
+# Health Connect: the plugin creates records by reflection / class name.
 -keep class androidx.health.** { *; }
 -keep class cachet.plugins.health.** { *; }

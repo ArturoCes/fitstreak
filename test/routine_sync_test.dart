@@ -115,6 +115,12 @@ class FakeSyncApi implements RoutineSyncApi {
 
   @override
   Future<void> unfollow(String id) async => follows.remove((user, id));
+
+  @override
+  Future<void> deleteAccount() async {
+    rows.removeWhere((_, r) => r.owner == user);
+    follows.removeWhere((f) => f.$1 == user);
+  }
 }
 
 void main() {
