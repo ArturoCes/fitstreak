@@ -72,7 +72,9 @@ class HealthNotifier extends Notifier<bool> {
     final types = [..._readTypes, ..._writeTypes];
     final access = [
       for (final _ in _readTypes) HealthDataAccess.READ,
-      for (final _ in _writeTypes) HealthDataAccess.READ_WRITE,
+      // Write only: reading workouts isn't needed, and Play asks to justify
+      // every Health Connect permission.
+      for (final _ in _writeTypes) HealthDataAccess.WRITE,
     ];
     final ok = await _health.requestAuthorization(types, permissions: access);
     await _setConnected(ok);
