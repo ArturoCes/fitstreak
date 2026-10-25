@@ -5,15 +5,23 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/app_state.dart';
 import '../../data/labels_es.dart';
+import '../../data/motivation.dart';
+import '../../data/progress_state.dart';
+import '../routine/share_receiver.dart';
 import '../../data/user_profile.dart';
+import '../../data/sync/sync_state.dart';
 
+/// First-run questions (body, goal, schedule, equipment, quotes, health)
+/// that build the profile and the first routine.
 class OnboardingScreen extends ConsumerStatefulWidget {
+  /// Creates the screen.
   const OnboardingScreen({super.key});
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
+/// The answers and the current step.
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pages = PageController();
   int _step = 0;
@@ -22,6 +30,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _age = TextEditingController();
   final _height = TextEditingController();
   final _weight = TextEditingController();
+  Sex? _sex;
   Goal? _goal;
   Level? _level;
   int _days = 3;
@@ -29,14 +38,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Place? _place;
   final Set<String> _equipment = {};
   final Set<Injury> _injuries = {};
+  MotivationTaste? _taste;
   bool _acceptedDisclaimer = false;
 
-  static const _stepCount = 5;
+  static const _stepCount = 6;
 
   @override
   void initState() {
     super.initState();
-    // Para que el botón "Siguiente" se active al escribir.
+    // So the "Siguiente" button enables while typing.
     for (final c in [_age, _height, _weight]) {
       c.addListener(() => setState(() {}));
     }
@@ -51,32 +61,41 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
+  /// Typed age, if valid.
   int? get _ageValue => int.tryParse(_age.text);
+  /// Typed height, if valid.
   int? get _heightValue => int.tryParse(_height.text);
+  /// Typed weight (comma or dot), if valid.
   double? get _weightValue => double.tryParse(_weight.text.replaceAll(',', '.'));
 
+  /// Whether the current step is complete.
   bool get _canContinue => switch (_step) {
-        0 => _inRange(_ageValue, 14, 99) &&
+        0 => _sex != null &&
+            _inRange(_ageValue, 14, 99) &&
             _inRange(_heightValue, 120, 230) &&
             _inRange(_weightValue, 30, 300),
         1 => _goal != null && _level != null,
         2 => true,
         3 => _place != null,
+        4 => _taste != null,
         _ => _acceptedDisclaimer,
       };
 
+  /// Whether [v] is set and within [min]..[max].
   static bool _inRange(num? v, num min, num max) =>
       v != null && v >= min && v <= max;
 
+  /// Picks gym or home and presets the equipment.
   void _selectPlace(Place p) => setState(() {
         _place = p;
         _equipment.clear();
-        // En el gimnasio damos todo por hecho y el usuario quita lo que falte.
+        // At the gym everything is assumed and the user removes what's missing.
         if (p == Place.gym) {
           _equipment.addAll([...datasetEquipment, ...extraEquipment]);
         }
       });
 
+  /// Next step, or on the last one saves the profile and builds the routine.
   Future<void> _next() async {
     if (_step < _stepCount - 1) {
       setState(() => _step++);
@@ -90,6 +109,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await ref.read(profileProvider.notifier).save(
           UserProfile(
             age: _ageValue!,
+            sex: _sex!,
             heightCm: _heightValue!,
             weightKg: _weightValue!,
             goal: _goal!,
@@ -101,10 +121,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             injuries: {..._injuries},
           ),
         );
+    await ref.read(motivationProvider.notifier).setTaste(_taste!);
     await ref.read(routineProvider.notifier).regenerate();
-    if (mounted) context.go('/');
+    // New routine: the one followed from someone else is no longer theirs.
+    await ref.read(syncProvider.notifier).stopFollowing();
+    await ref.read(dayOverrideProvider.notifier).set(0);
+    if (!mounted) return;
+    context.go('/');
+    // If someone shared a routine before the app was set up, now is the time
+    // to import it.
+    final prefs = ref.read(prefsProvider);
+    final pending = prefs.getString(pendingImportKey);
+    if (pending != null) {
+      await prefs.remove(pendingImportKey);
+      if (mounted) context.push('/import', extra: pending);
+    }
   }
 
+  /// Previous step.
   void _back() {
     setState(() => _step--);
     _pages.previousPage(
@@ -134,6 +168,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           _goalStep(),
           _scheduleStep(),
           _equipmentStep(),
+          _motivationStep(),
           _healthStep(),
         ],
       ),
@@ -149,10 +184,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
+  /// Step 1: sex, age, height and weight.
   Widget _bodyStep() => _StepList(
         title: 'Cuéntanos sobre ti',
         subtitle: 'Lo usamos para ajustar la intensidad de la rutina.',
         children: [
+          Text('Sexo', style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final s in Sex.values)
+                ChoiceChip(
+                  label: Text(s.label),
+                  selected: _sex == s,
+                  showCheckmark: false,
+                  labelStyle: TextStyle(
+                    color: _sex == s ? Colors.white : Theme.of(context).colorScheme.onSurface,
+                  ),
+                  onSelected: (_) => setState(() => _sex = s),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Solo para calcular las calorías que gastas.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 16),
           _NumberField(controller: _age, label: 'Edad', suffix: 'años'),
           _NumberField(controller: _height, label: 'Altura', suffix: 'cm'),
           _NumberField(
@@ -164,6 +224,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ],
       );
 
+  /// Step 2: goal and level.
   Widget _goalStep() => _StepList(
         title: '¿Qué buscas?',
         children: [
@@ -186,6 +247,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ],
       );
 
+  /// Step 3: days per week and session length.
   Widget _scheduleStep() => _StepList(
         title: '¿Cuánto puedes entrenar?',
         children: [
@@ -212,6 +274,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ],
       );
 
+  /// Step 4: gym or home, and the equipment.
   Widget _equipmentStep() => _StepList(
         title: '¿Dónde entrenas?',
         children: [
@@ -261,6 +324,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ],
       );
 
+  /// Step 5: quote taste.
+  Widget _motivationStep() => _StepList(
+        title: '¿Qué te motiva más?',
+        subtitle: 'Cada día verás una frase de tus personajes favoritos. '
+            'Luego puedes poner una imagen tuya de fondo.',
+        children: [
+          for (final t in MotivationTaste.values)
+            _Choice(
+              label: '${t.emoji}  ${t.label}',
+              subtitle: switch (t) {
+                MotivationTaste.anime => 'Slam Dunk, Haikyuu, Naruto, One Piece…',
+                MotivationTaste.movies => 'Rocky, Star Wars, Gladiator…',
+                MotivationTaste.both => 'Un poco de todo',
+                MotivationTaste.none => 'Sin frases en la pantalla de inicio',
+              },
+              selected: _taste == t,
+              onTap: () => setState(() => _taste = t),
+            ),
+        ],
+      );
+
+  /// Step 6: injuries and the medical disclaimer.
   Widget _healthStep() => _StepList(
         title: '¿Alguna molestia o lesión?',
         subtitle: 'Apartaremos los ejercicios que más cargan esa zona.',
@@ -295,11 +380,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       );
 }
 
+/// A step's scrollable page with title and subtitle.
 class _StepList extends StatelessWidget {
+  /// Creates the page.
   const _StepList({required this.title, this.subtitle, required this.children});
 
+  /// Question of the step.
   final String title;
+
+  /// Explanation under the title.
   final String? subtitle;
+
+  /// The step's fields.
   final List<Widget> children;
 
   @override
@@ -320,7 +412,9 @@ class _StepList extends StatelessWidget {
   }
 }
 
+/// Numeric text field with a unit suffix.
 class _NumberField extends StatelessWidget {
+  /// Creates the field.
   const _NumberField({
     required this.controller,
     required this.label,
@@ -328,9 +422,16 @@ class _NumberField extends StatelessWidget {
     this.decimal = false,
   });
 
+  /// Holds the typed text.
   final TextEditingController controller;
+
+  /// Field label.
   final String label;
+
+  /// Unit ("años", "cm", "kg").
   final String suffix;
+
+  /// Allows decimals (comma or dot).
   final bool decimal;
 
   @override
@@ -353,7 +454,9 @@ class _NumberField extends StatelessWidget {
   }
 }
 
+/// A selectable option card.
 class _Choice extends StatelessWidget {
+  /// Creates the option.
   const _Choice({
     required this.label,
     required this.selected,
@@ -362,10 +465,19 @@ class _Choice extends StatelessWidget {
     this.icon,
   });
 
+  /// Option text.
   final String label;
+
+  /// Explanation under it.
   final String? subtitle;
+
+  /// Leading icon (narrow side-by-side options).
   final IconData? icon;
+
+  /// Whether it is chosen.
   final bool selected;
+
+  /// Chooses it.
   final VoidCallback onTap;
 
   @override
@@ -377,7 +489,7 @@ class _Choice extends StatelessWidget {
         leading: icon == null ? null : Icon(icon),
         title: Text(label),
         subtitle: subtitle == null ? null : Text(subtitle!),
-        // Con icono va en una fila estrecha: la selección ya se ve por el color.
+        // With an icon it sits in a narrow row: the color shows the selection.
         trailing: selected && icon == null ? const Icon(Icons.check_circle) : null,
         onTap: onTap,
       ),

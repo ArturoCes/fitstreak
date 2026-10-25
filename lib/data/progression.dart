@@ -4,7 +4,7 @@ import 'exercise.dart';
 import 'routine.dart';
 import 'streak.dart';
 
-/// Equipo con el que tiene sentido apuntar kilos.
+/// Equipment for which logging kilograms makes sense.
 const _weightedEquipment = {
   'barbell',
   'dumbbell',
@@ -15,40 +15,46 @@ const _weightedEquipment = {
   'medicine ball',
 };
 
+/// Whether [e] is loaded, so the workout asks for kilograms.
 bool usesWeight(Exercise e) => _weightedEquipment.contains(e.equipmentOrBody);
 
-/// Ejercicios estáticos (plancha...): se apuntan segundos en vez de repeticiones.
+/// Timed holds (plank...): seconds are logged instead of reps.
 bool isTimed(RoutineItem item) => item.reps.contains('s');
 
-/// "8-10" → (8, 10); "15" → (15, 15); "30-45 s" → (30, 45).
+/// Parses a rep range: "8-10" → (8, 10); "15" → (15, 15); "30-45 s" → (30, 45).
 (int, int) repRange(String reps) {
   final nums = RegExp(r'\d+').allMatches(reps).map((m) => int.parse(m[0]!)).toList();
   if (nums.isEmpty) return (10, 10);
   return (nums.first, nums.length > 1 ? nums[1] : nums.first);
 }
 
-/// Cuánto subir cuando ya dominas el peso: poco en mancuernas y kettlebells
-/// (es por mano), más en barra y máquinas.
+/// How much to add once a weight is mastered: little on dumbbells and
+/// kettlebells (it is per hand), more on barbells and machines.
 double weightStep(Exercise e) => switch (e.equipmentOrBody) {
       'dumbbell' || 'kettlebells' || 'medicine ball' => 1,
       _ => 2.5,
     };
 
-/// Lo que se propone para la sesión de hoy.
+/// What is suggested for today's session.
 class SetPlan {
-  const SetPlan({required this.sets, required this.last, required this.levelUp});
+  /// Creates a plan.
+  const SetPlan({required this.sets, required this.last, required this.levelUp, this.levelUpSets});
 
+  /// What is prefilled when the workout starts: exactly last time's sets.
   final List<SetLog> sets;
 
-  /// La última vez que hiciste este ejercicio (null si es la primera).
+  /// Last time this exercise was done (null if it is the first time).
   final ExerciseLog? last;
 
-  /// true si toca subir peso (o repeticiones sin carga).
+  /// True when it is time to add weight (or reps when unloaded).
   final bool levelUp;
+
+  /// The progression proposal (more weight with the minimum reps, or one
+  /// more rep when unloaded). Only applied if the user wants to.
+  final List<SetLog>? levelUpSets;
 }
 
-/// Última sesión registrada de un ejercicio (los logs van del más antiguo al
-/// más reciente).
+/// Last logged session of an exercise ([logs] go from oldest to newest).
 ExerciseLog? lastSession(List<WorkoutLog> logs, String exerciseId) {
   for (final log in logs.reversed) {
     for (final e in log.exercises) {
@@ -58,9 +64,10 @@ ExerciseLog? lastSession(List<WorkoutLog> logs, String exerciseId) {
   return null;
 }
 
-/// Propuesta para hoy: como mínimo lo que hiciste la última vez. Si en todas
-/// las series llegaste al tope del rango, sube el peso (o una repetición si
-/// no hay carga) y vuelve al mínimo de repeticiones.
+/// Today's proposal: the same as last time, set by set (weight and reps). If
+/// every set reached the top of the range, raising the weight (or one more
+/// rep when unloaded) is also offered, without applying it (double
+/// progression).
 SetPlan planSets(RoutineItem item, Exercise exercise, ExerciseLog? last) {
   final (minReps, maxReps) = repRange(item.reps);
   final weighted = usesWeight(exercise);
@@ -73,24 +80,31 @@ SetPlan planSets(RoutineItem item, Exercise exercise, ExerciseLog? last) {
     );
   }
 
+  SetLog prevAt(int i) => last.sets[min(i, last.sets.length - 1)];
+  final sets = [
+    for (var i = 0; i < item.sets; i++)
+      SetLog(reps: prevAt(i).reps, weightKg: weighted ? (prevAt(i).weightKg ?? 0) : null),
+  ];
+
   final mastered = last.sets.every((s) => s.reps >= maxReps);
-  final sets = <SetLog>[];
-  for (var i = 0; i < item.sets; i++) {
-    final prev = last.sets[min(i, last.sets.length - 1)];
-    if (weighted) {
-      final prevKg = prev.weightKg ?? 0;
-      sets.add(mastered && prevKg > 0
-          ? SetLog(reps: minReps, weightKg: prevKg + weightStep(exercise))
-          : SetLog(reps: max(prev.reps, minReps), weightKg: prevKg));
-    } else {
-      sets.add(SetLog(reps: mastered ? prev.reps + 1 : max(prev.reps, minReps)));
-    }
-  }
-  final levelUp = mastered && (!weighted || (last.sets.first.weightKg ?? 0) > 0);
-  return SetPlan(sets: sets, last: last, levelUp: levelUp);
+  final hasLoad = (last.sets.first.weightKg ?? 0) > 0;
+  final levelUp = mastered && (!weighted || hasLoad);
+  return SetPlan(
+    sets: sets,
+    last: last,
+    levelUp: levelUp,
+    levelUpSets: !levelUp
+        ? null
+        : [
+            for (final s in sets)
+              weighted
+                  ? SetLog(reps: minReps, weightKg: (s.weightKg ?? 0) + weightStep(exercise))
+                  : SetLog(reps: s.reps + 1),
+          ],
+  );
 }
 
-/// Texto corto de una sesión: "10×4 kg · 10×4 kg · 8×4 kg".
+/// Short text of a session: "10×4 kg · 10×4 kg · 8×4 kg".
 String describeSets(List<SetLog> sets, {bool timed = false}) => sets
     .map((s) => s.weightKg != null && s.weightKg! > 0
         ? '${s.reps}×${formatKg(s.weightKg!)} kg'
@@ -99,10 +113,12 @@ String describeSets(List<SetLog> sets, {bool timed = false}) => sets
             : '${s.reps} reps')
     .join(' · ');
 
+/// Kilograms without trailing zeros: 40 → "40", 42.5 → "42.5".
 String formatKg(double kg) => kg == kg.roundToDouble() ? kg.toStringAsFixed(0) : kg.toStringAsFixed(1);
 
-/// Un punto del gráfico de progreso de un ejercicio.
+/// One point of an exercise's progress chart (one session).
 class ProgressPoint {
+  /// Creates a point.
   const ProgressPoint({
     required this.date,
     required this.bestWeight,
@@ -111,23 +127,34 @@ class ProgressPoint {
     required this.sets,
   });
 
+  /// Session date.
   final DateTime date;
-  final double bestWeight; // 0 si no hay carga
-  final int bestReps; // repeticiones de la mejor serie
-  final double volume; // suma de reps × kg (o reps sin carga)
+
+  /// Heaviest weight of the session (0 when unloaded).
+  final double bestWeight;
+
+  /// Reps of the best set.
+  final int bestReps;
+
+  /// Sum of reps × kg (or reps when unloaded).
+  final double volume;
+
+  /// All the sets of the session.
   final List<SetLog> sets;
 
-  /// Estimación de 1RM (fórmula de Epley) para comparar sesiones con distinto
-  /// número de repeticiones.
+  /// Estimated one-rep max (Epley formula), to compare sessions with
+  /// different reps.
   double get estimated1RM => bestWeight * (1 + bestReps / 30);
 }
 
+/// Progress points of [exerciseId], one per session, oldest first.
 List<ProgressPoint> progressFor(List<WorkoutLog> logs, String exerciseId) => [
       for (final log in logs)
         for (final e in log.exercises)
           if (e.exerciseId == exerciseId && e.sets.isNotEmpty) _point(log.date, e.sets),
     ];
 
+/// Summarizes one session's [sets] into a chart point.
 ProgressPoint _point(DateTime date, List<SetLog> sets) {
   var best = sets.first;
   for (final s in sets) {
@@ -148,15 +175,15 @@ ProgressPoint _point(DateTime date, List<SetLog> sets) {
   );
 }
 
-/// Entrenos por semana (lunes a domingo) de las últimas [weeks] semanas,
-/// la última es la actual.
+/// Workouts per week (Monday to Sunday) over the last [weeks] weeks; the
+/// last entry is the current week.
 List<int> workoutsPerWeek(List<WorkoutLog> logs, DateTime today, {int weeks = 8}) {
   final t = dateOnly(today);
-  final thisMonday = t.subtract(Duration(days: t.weekday - 1));
+  final thisMonday = addDays(t, 1 - t.weekday);
   final counts = List.filled(weeks, 0);
   for (final log in logs) {
     final d = dateOnly(log.date);
-    final weeksAgo = daysBetween(d.subtract(Duration(days: d.weekday - 1)), thisMonday) ~/ 7;
+    final weeksAgo = daysBetween(addDays(d, 1 - d.weekday), thisMonday) ~/ 7;
     if (weeksAgo >= 0 && weeksAgo < weeks) counts[weeks - 1 - weeksAgo]++;
   }
   return counts;

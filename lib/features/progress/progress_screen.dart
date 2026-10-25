@@ -11,7 +11,9 @@ import '../../data/streak.dart';
 import '../../ui/exercise_media.dart';
 import '../../ui/theme.dart';
 
+/// "Progreso" tab: totals, workouts per week and per-exercise progress.
 class ProgressScreen extends ConsumerWidget {
+  /// Creates the screen.
   const ProgressScreen({super.key});
 
   @override
@@ -34,7 +36,7 @@ class ProgressScreen extends ConsumerWidget {
     );
     final perWeek = workoutsPerWeek(logs, now);
 
-    // Ejercicios con registros, el más reciente primero.
+    // Exercises with records, most recent first.
     final lastDate = <String, DateTime>{};
     for (final l in logs) {
       for (final e in l.exercises) {
@@ -96,13 +98,21 @@ class ProgressScreen extends ConsumerWidget {
   }
 }
 
+/// Kilograms, in tonnes above 10,000 ("12.3 t").
 String _compact(double v) => v >= 10000 ? '${(v / 1000).toStringAsFixed(1)} t' : formatKg(v);
 
+/// One total (workouts, sets, kilos...).
 class _Stat extends StatelessWidget {
+  /// Creates the figure.
   const _Stat({required this.value, required this.label, this.wide = false});
 
+  /// The figure.
   final String value;
+
+  /// What it counts.
   final String label;
+
+  /// Takes the full row width.
   final bool wide;
 
   @override
@@ -126,17 +136,22 @@ class _Stat extends StatelessWidget {
   }
 }
 
+/// Bar chart of workouts per week.
 class _WeeksChart extends StatelessWidget {
+  /// Creates the chart.
   const _WeeksChart({required this.perWeek, required this.today});
 
+  /// Workouts per week, oldest first; the last is the current week.
   final List<int> perWeek;
+
+  /// Today, to label the weeks.
   final DateTime today;
 
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).textTheme.bodySmall;
     final maxY = (perWeek.fold(0, (a, b) => a > b ? a : b) + 1).toDouble();
-    final monday = dateOnly(today).subtract(Duration(days: today.weekday - 1));
+    final monday = addDays(today, 1 - today.weekday);
     return BarChart(
       BarChartData(
         maxY: maxY < 4 ? 4 : maxY,
@@ -168,7 +183,7 @@ class _WeeksChart extends StatelessWidget {
               getTitlesWidget: (v, _) {
                 final weeksAgo = perWeek.length - 1 - v.toInt();
                 if (weeksAgo == 0) return Text('Esta', style: muted);
-                final d = monday.subtract(Duration(days: 7 * weeksAgo));
+                final d = addDays(monday, -7 * weeksAgo);
                 return Text('${d.day}/${d.month}', style: muted);
               },
             ),
@@ -193,10 +208,15 @@ class _WeeksChart extends StatelessWidget {
   }
 }
 
+/// An exercise with its last session; opens its progress chart.
 class _ExerciseTile extends StatelessWidget {
+  /// Creates the tile.
   const _ExerciseTile({required this.exercise, required this.points});
 
+  /// The exercise.
   final Exercise exercise;
+
+  /// Its sessions, oldest first.
   final List<ProgressPoint> points;
 
   @override

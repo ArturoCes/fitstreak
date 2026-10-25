@@ -5,7 +5,9 @@ import '../../data/app_state.dart';
 import '../../data/progress_state.dart';
 import '../../data/streak.dart';
 
+/// "Racha" tab: streak, freezes, calendar and the daily reminder.
 class StreakScreen extends ConsumerWidget {
+  /// Creates the screen.
   const StreakScreen({super.key});
 
   @override
@@ -82,19 +84,23 @@ class StreakScreen extends ConsumerWidget {
   }
 }
 
-/// Últimas 5 semanas, de lunes a domingo.
+/// Last 5 weeks, Monday to Sunday, with the trained days marked.
 class _Calendar extends StatelessWidget {
+  /// Creates the calendar.
   const _Calendar({required this.streak, required this.today});
 
+  /// Streak with the trained days.
   final StreakState streak;
+
+  /// Today (highlighted).
   final DateTime today;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final t = dateOnly(today);
-    final monday = t.subtract(Duration(days: t.weekday - 1));
-    final first = monday.subtract(const Duration(days: 28));
+    final monday = addDays(t, 1 - t.weekday);
+    final first = addDays(monday, -28);
     const labels = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
     return Card(
@@ -156,7 +162,9 @@ class _Calendar extends StatelessWidget {
   }
 }
 
+/// Daily reminder switch and time.
 class _ReminderTile extends ConsumerWidget {
+  /// Creates the tile.
   const _ReminderTile();
 
   @override

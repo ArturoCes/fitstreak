@@ -1,6 +1,8 @@
-/// Ejercicio tal y como viene de free-exercise-db (dominio público).
+/// An exercise as it comes from free-exercise-db (public domain).
 /// https://github.com/yuhonas/free-exercise-db
 class Exercise {
+  /// Creates an exercise. Catalog entries are built with [Exercise.fromJson];
+  /// the user's own exercises use `customExercise` in exercise_repository.dart.
   const Exercise({
     required this.id,
     required this.name,
@@ -17,51 +19,80 @@ class Exercise {
     this.instructionsEs = const [],
   });
 
-  /// Dibujos de Everkinetic (CC BY-SA 4.0), emparejados por nombre.
+  /// Base URL of the Everkinetic drawings (CC BY-SA 4.0), matched by name.
   /// https://github.com/everkinetic/data
   static const drawingBaseUrl =
       'https://raw.githubusercontent.com/everkinetic/data/main/dist/png/';
 
-  /// Mientras no tengamos almacenamiento propio, las imágenes se sirven
-  /// desde el repo original.
+  /// Base URL of the photos. Until we have our own storage, images are served
+  /// straight from the original repository.
   static const imageBaseUrl =
       'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
 
+  /// Stable identifier from the dataset (e.g. `Barbell_Squat`), or
+  /// `custom-...` for the user's own exercises.
   final String id;
+
+  /// English name from the dataset (shown as is, by the user's choice).
   final String name;
-  final String level; // beginner | intermediate | expert
-  final String category; // strength, stretching, cardio...
-  final String? force; // push | pull | static
-  final String? mechanic; // compound | isolation
-  final String? equipment; // null = sin especificar
+
+  /// Difficulty: `beginner`, `intermediate` or `expert`.
+  final String level;
+
+  /// Dataset category: `strength`, `stretching`, `cardio`...
+  final String category;
+
+  /// Movement direction: `push`, `pull` or `static` (null if unknown).
+  final String? force;
+
+  /// `compound` or `isolation` (null if unknown).
+  final String? mechanic;
+
+  /// Main equipment (`barbell`, `dumbbell`...); null means unspecified.
+  final String? equipment;
+
+  /// Muscles mainly worked, using the dataset's English keys.
   final List<String> primaryMuscles;
+
+  /// Muscles worked as helpers.
   final List<String> secondaryMuscles;
+
+  /// Original English instructions, one step per item.
   final List<String> instructions;
+
+  /// Photo paths relative to [imageBaseUrl] (start and end position).
   final List<String> images;
 
-  /// Sin equipo especificado lo tratamos como peso corporal.
+  /// The equipment, treating "unspecified" as bodyweight.
   String get equipmentOrBody => equipment ?? 'body only';
 
-  /// Posición inicial y final del dibujo; vacío si no hay dibujo para este.
+  /// Drawing files (start and end position); empty when there is no drawing.
   final List<String> drawings;
 
-  /// Instrucciones traducidas (tool/i18n_es); vacío si falta la traducción.
+  /// Spanish instructions (assets/data/instructions_es.json); empty when the
+  /// translation is missing.
   final List<String> instructionsEs;
 
-  /// Pasos a mostrar: en español si existen, si no el original. Sin vacíos.
+  /// Steps to show: in Spanish when available, otherwise the original. Blank
+  /// steps are dropped.
   List<String> get steps => [
         for (final s in instructionsEs.isNotEmpty ? instructionsEs : instructions)
           if (s.trim().isNotEmpty) s,
       ];
 
+  /// Full photo URLs.
   List<String> get imageUrls => [for (final i in images) '$imageBaseUrl$i'];
 
+  /// Full drawing URLs.
   List<String> get drawingUrls => [for (final d in drawings) '$drawingBaseUrl$d'];
 
-  /// Las imágenes a mostrar según la preferencia, con las fotos como respaldo.
+  /// The images to show for the user's preference, falling back to photos
+  /// when the exercise has no drawing.
   List<String> urlsFor({required bool drawings}) =>
       drawings && this.drawings.isNotEmpty ? drawingUrls : imageUrls;
 
+  /// Parses a dataset entry, adding the matched [drawings] and Spanish
+  /// [instructionsEs] that live in separate asset files.
   factory Exercise.fromJson(
     Map<String, dynamic> json, {
     List<String> drawings = const [],
@@ -83,6 +114,7 @@ class Exercise {
         images: _strings(json['images']),
       );
 
+  /// Reads an optional JSON list of strings.
   static List<String> _strings(Object? v) =>
       (v as List<dynamic>? ?? const []).cast<String>();
 }

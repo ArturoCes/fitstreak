@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fondo del widget: oscuro con un brillo violeta arriba a la izquierda. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp"/>
+            <solid android:color="#FF120E1F"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp"/>
+            <gradient android:type="radial" android:gradientRadius="220dp"
+                android:centerX="0.15" android:centerY="0.1"
+                android:startColor="#996D3BEA" android:endColor="#00120E1F"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp"/>
+            <stroke android:width="1dp" android:color="#556D3BEA"/>
+        </shape>
+    </item>
+</layer-list>

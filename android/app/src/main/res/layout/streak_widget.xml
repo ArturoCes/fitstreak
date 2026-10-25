@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget de racha (ver StreakWidgetProvider.kt). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:orientation="horizontal"
+    android:padding="14dp">
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.1"
+        android:orientation="vertical">
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <ImageView android:layout_width="24dp" android:layout_height="34dp" android:src="@drawable/ic_widget_flame"/>
+            <TextView android:id="@+id/streak_days" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:text="0" android:textColor="#FFFFFFFF"
+                android:textSize="38sp" android:fontFamily="sans-serif-medium" android:includeFontPadding="false"/>
+        </LinearLayout>
+        <TextView android:id="@+id/streak_label" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="días de racha" android:textColor="#FFB9AEDB" android:textSize="12sp"/>
+        <!-- Separador: en los widgets no se permite View, sí FrameLayout. -->
+        <FrameLayout android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+        <TextView android:id="@+id/status" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Empieza hoy tu racha" android:textColor="#FFFFA94D" android:textSize="12sp"
+            android:fontFamily="sans-serif-medium" android:maxLines="2"/>
+        <TextView android:id="@+id/next_day" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="6dp" android:background="@drawable/widget_chip"
+            android:paddingStart="10dp" android:paddingEnd="10dp" android:paddingTop="4dp" android:paddingBottom="4dp"
+            android:text="Próximo: —" android:textColor="#FFE9E2FF" android:textSize="12sp"
+            android:maxLines="1" android:ellipsize="end"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+        android:layout_marginStart="12dp" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="Tu semana" android:textColor="#FFE9E2FF" android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
+            <TextView android:id="@+id/week_sets" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0 series" android:textColor="#FF8E83B0" android:textSize="11sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+            android:layout_marginTop="8dp" android:orientation="horizontal">
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar0" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day0" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="L" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar1" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day1" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="M" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar2" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day2" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="X" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar3" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day3" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="J" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar4" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day4" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="V" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar5" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day5" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="S" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                android:orientation="vertical" android:gravity="center_horizontal">
+                <ImageView android:id="@+id/bar6" android:layout_width="14dp" android:layout_height="0dp"
+                    android:layout_weight="1" android:background="@drawable/widget_bar_track"
+                    android:src="@drawable/widget_bar_day" android:scaleType="fitXY"/>
+                <TextView android:id="@+id/day6" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp" android:text="D" android:textColor="#FF8E83B0" android:textSize="10sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

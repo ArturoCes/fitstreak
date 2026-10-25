@@ -7,9 +7,12 @@ import '../../data/labels_es.dart';
 import '../../ui/exercise_media.dart';
 import '../../ui/theme.dart';
 
+/// How an exercise is done: animated image, muscles, equipment and steps.
 class ExerciseDetailScreen extends ConsumerWidget {
+  /// Creates the screen for exercise [id].
   const ExerciseDetailScreen({super.key, required this.id});
 
+  /// Exercise id.
   final String id;
 
   @override
@@ -28,9 +31,12 @@ class ExerciseDetailScreen extends ConsumerWidget {
   }
 }
 
+/// The loaded exercise's content.
 class _Detail extends ConsumerWidget {
+  /// Creates the content.
   const _Detail(this.e);
 
+  /// Exercise shown.
   final Exercise e;
 
   @override
@@ -38,7 +44,9 @@ class _Detail extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final showingDrawings = ref.watch(preferDrawingsProvider) && e.drawings.isNotEmpty;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+      // With its own padding the list doesn't add Android's navigation bar:
+      // it is added by hand so the last step isn't hidden.
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 32 + MediaQuery.paddingOf(context).bottom),
       children: [
         Container(
           height: 300,
@@ -111,10 +119,15 @@ class _Detail extends ConsumerWidget {
   }
 }
 
+/// Colored label (muscle, equipment, level...).
 class _Tag extends StatelessWidget {
+  /// Creates the label.
   const _Tag(this.label, this.color);
 
+  /// Text.
   final String label;
+
+  /// Text and tint color.
   final Color color;
 
   @override

@@ -8,7 +8,9 @@ import '../../ui/exercise_media.dart';
 import '../../ui/theme.dart';
 import 'catalog_filter.dart';
 
+/// "Ejercicios" tab: searchable, filterable catalog.
 class CatalogScreen extends ConsumerWidget {
+  /// Creates the screen.
   const CatalogScreen({super.key});
 
   @override
@@ -124,6 +126,7 @@ class CatalogScreen extends ConsumerWidget {
     );
   }
 
+  /// Opens the equipment and level filters.
   Future<void> _showFilters(BuildContext context) => showModalBottomSheet<void>(
         context: context,
         showDragHandle: true,
@@ -131,11 +134,18 @@ class CatalogScreen extends ConsumerWidget {
       );
 }
 
+/// One muscle filter chip.
 class _MuscleChip extends StatelessWidget {
+  /// Creates the chip.
   const _MuscleChip({required this.label, required this.selected, required this.onTap});
 
+  /// Muscle name.
   final String label;
+
+  /// Whether it is the active filter.
   final bool selected;
+
+  /// Toggles the filter.
   final VoidCallback onTap;
 
   @override
@@ -153,7 +163,9 @@ class _MuscleChip extends StatelessWidget {
   }
 }
 
+/// Sheet with the equipment and level filters.
 class _FiltersSheet extends ConsumerWidget {
+  /// Creates the sheet.
   const _FiltersSheet();
 
   @override
@@ -222,9 +234,12 @@ class _FiltersSheet extends ConsumerWidget {
   }
 }
 
+/// A catalog result; opens the exercise detail.
 class _ExerciseCard extends StatelessWidget {
+  /// Creates the card.
   const _ExerciseCard(this.exercise);
 
+  /// Exercise shown.
   final Exercise exercise;
 
   @override

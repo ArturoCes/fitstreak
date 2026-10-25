@@ -1,9 +1,9 @@
 import 'exercise.dart';
 import 'user_profile.dart';
 
-// El dataset solo indica el equipo "principal". Dominadas o fondos aparecen
-// como "body only" aunque necesitan barra o paralelas, así que deducimos esos
-// requisitos por el nombre.
+// The dataset only lists the "main" equipment. Pull-ups or dips appear as
+// "body only" although they need a bar or parallel bars, so those
+// requirements are inferred from the name.
 
 final _needsPullUpBar = RegExp(
   r'pull-?ups?|chin-?ups?|hanging|muscle.?up|inverted row',
@@ -11,15 +11,15 @@ final _needsPullUpBar = RegExp(
 );
 final _needsDipStation = RegExp(r'\bdips?\b', caseSensitive: false);
 final _needsBench = RegExp(r'bench|incline|decline', caseSensitive: false);
-// Las flexiones inclinadas o declinadas se apoyan en cualquier silla.
+// Incline or decline push-ups can rest on any chair.
 final _pushUp = RegExp(r'push-?ups?', caseSensitive: false);
 
-/// Equipo extra que pide un ejercicio además de `exercise.equipment`.
+/// Extra equipment an exercise needs on top of `exercise.equipment`.
 Set<String> extraRequirements(Exercise e) {
   final n = e.name;
   return {
     if (_needsPullUpBar.hasMatch(n)) pullUpBar,
-    // Los fondos en banco se pueden hacer con una silla.
+    // Bench dips can be done on a chair.
     if (_needsDipStation.hasMatch(n) && !n.toLowerCase().contains('bench'))
       dipStation,
     if (_needsBench.hasMatch(n) &&
@@ -30,10 +30,12 @@ Set<String> extraRequirements(Exercise e) {
   };
 }
 
-/// Equipo que el generador nunca usa: "other" es demasiado ambiguo y el foam
-/// roller no es para entrenar fuerza.
+/// Equipment the generator never uses: "other" is too vague and a foam
+/// roller is not for strength training.
 const _neverForRoutines = {'other', 'foam roll'};
 
+/// Whether the user can do [e] with the [available] equipment (bodyweight is
+/// always available).
 bool hasEquipmentFor(Exercise e, Set<String> available) {
   final eq = e.equipmentOrBody;
   if (_neverForRoutines.contains(eq)) return false;
@@ -41,8 +43,8 @@ bool hasEquipmentFor(Exercise e, Set<String> available) {
   return extraRequirements(e).every(available.contains);
 }
 
-// Reglas orientativas por lesión. No sustituyen el consejo de un profesional:
-// solo apartan los movimientos que más suelen cargar esa zona.
+// Rough rules per injury. They do not replace professional advice: they only
+// keep away the movements that usually load that area the most.
 final _injuryRules = {
   Injury.knee: RegExp(
     r'jump|hop|lunge|pistol|sissy|split squat|step.?up|box|burpee|skater',
@@ -69,6 +71,8 @@ final _highImpact = RegExp(
   caseSensitive: false,
 );
 
+/// Whether [e] suits the profile: avoids the movements flagged for the user's
+/// injuries, and jumps and impacts for profiles that prefer low impact.
 bool isSafeFor(Exercise e, UserProfile p) {
   for (final injury in p.injuries) {
     if (_injuryRules[injury]!.hasMatch(e.name)) return false;

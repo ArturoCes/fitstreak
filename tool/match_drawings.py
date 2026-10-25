@@ -1,4 +1,10 @@
-"""Empareja ejercicios de free-exercise-db con dibujos de Everkinetic por nombre."""
+"""Matches free-exercise-db exercises with Everkinetic drawings by name.
+
+  match_drawings.py <free.json> <everkinetic.json> <png_dir> <out.json>
+
+Writes {exercise_id: {drawings, everkinetic, score}} and prints the
+approximate matches so they can be reviewed by hand.
+"""
 import json
 import re
 import sys
@@ -25,6 +31,8 @@ SYN = {
 
 
 def tokens(name):
+    """Normalized set of meaningful words of an exercise name (singular,
+    synonyms unified, stop words removed)."""
     s = name.lower().replace("-", " ").replace("_", " ").replace("dead lift", "deadlift")
     s = re.sub(r"[^a-z0-9 ]", " ", s)
     words = []
@@ -53,16 +61,16 @@ for f in free:
         score = inter / len(ft | et)
         if score > best_score:
             best, best_score = (e, imgs), score
-    # Palabras que cambian la postura o la variante: si solo un lado la tiene,
-    # el dibujo no representa ese ejercicio.
+    # Words that change the posture or variant: if only one side has it, the
+    # drawing doesn't show that exercise.
     KEY = {"incline", "decline", "rear", "triceps", "hack", "pistol", "reverse",
            "band", "bands", "front", "seated", "standing", "lying", "wide",
            "close", "narrow", "smith"}
     if best and best_score < 1.0 and (ft ^ tokens(best[0]["title"])) & KEY:
         best, best_score = None, 0.0
-    # Si un nombre contiene al otro y solo sobran palabras neutras (material,
-    # agarre medio...), es el mismo movimiento: "Barbell Bench Press - Medium
-    # Grip" ≈ "Bench Press".
+    # If one name contains the other and only neutral words are left over
+    # (equipment, medium grip...), it is the same movement: "Barbell Bench
+    # Press - Medium Grip" ≈ "Bench Press".
     NEUTRAL = {"barbell", "dumbbell", "cable", "machine", "medium", "grip", "ez",
                "bar", "weighted", "bodyweight", "body", "using", "lever",
                "leverage", "plate", "weight", "only", "powerlifting"}

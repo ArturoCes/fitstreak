@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Atajos del icono (res/xml/shortcuts.xml). -->
+    <string name="shortcut_today_short">Resumen de hoy</string>
+    <string name="shortcut_today_long">Cómo voy hoy: calorías, entreno y racha</string>
+    <string name="shortcut_week_short">Análisis semanal</string>
+    <string name="shortcut_week_long">Mi semana: entrenos, kilos y récords</string>
+</resources>

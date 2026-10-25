@@ -1,5 +1,9 @@
-/// Traducciones de los valores del dataset (que viene en inglés).
-/// Los nombres e instrucciones de cada ejercicio se traducirán más adelante.
+/// Spanish labels for the dataset values (which come in English). Exercise
+/// names stay in English by the user's choice; instructions are translated in
+/// assets/data/instructions_es.json.
+library;
+
+/// Muscle keys → Spanish.
 const muscleEs = {
   'abdominals': 'Abdominales',
   'abductors': 'Abductores',
@@ -20,6 +24,7 @@ const muscleEs = {
   'triceps': 'Tríceps',
 };
 
+/// Equipment keys → Spanish.
 const equipmentEs = {
   'body only': 'Peso corporal',
   'barbell': 'Barra',
@@ -35,25 +40,17 @@ const equipmentEs = {
   'other': 'Otro',
 };
 
+/// Difficulty levels → Spanish.
 const levelEs = {
   'beginner': 'Principiante',
   'intermediate': 'Intermedio',
   'expert': 'Avanzado',
 };
 
-const categoryEs = {
-  'strength': 'Fuerza',
-  'stretching': 'Estiramiento',
-  'plyometrics': 'Pliometría',
-  'cardio': 'Cardio',
-  'powerlifting': 'Powerlifting',
-  'strongman': 'Strongman',
-  'olympic weightlifting': 'Halterofilia',
-};
-
-const forceEs = {'push': 'Empuje', 'pull': 'Tirón', 'static': 'Estático'};
-
+/// Mechanics (compound / isolation) → Spanish.
 const mechanicEs = {'compound': 'Compuesto', 'isolation': 'Aislamiento'};
 
+/// Looks [key] up in [table]: `-` when there is no key, the key itself when
+/// the table has no translation for it.
 String es(Map<String, String> table, String? key) =>
     key == null ? '-' : (table[key] ?? key);

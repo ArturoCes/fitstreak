@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Paleta inspirada en la referencia: fondo claro, azul marino para textos y
-/// bloques oscuros, verde turquesa como color principal y naranja de acento.
+/// Palette inspired by the user's reference design: light background, navy
+/// for text and dark blocks, teal as main color and orange as accent.
 abstract final class AppColors {
+  /// Navy: text and dark blocks in light mode.
   static const navy = Color(0xFF13293D);
+
+  /// Teal: main color.
   static const teal = Color(0xFF1FAE84);
+
+  /// Darker teal for gradients and secondary accents.
   static const tealDark = Color(0xFF168A68);
+
+  /// Orange: accent (call to action, streak, warnings).
   static const orange = Color(0xFFF7931E);
+
+  /// Grey for secondary text.
   static const muted = Color(0xFF8A94A6);
 }
 
-/// Colores que cambian entre modo claro y oscuro.
+/// Colors that change between light and dark mode.
 class _Palette {
+  /// Creates a palette.
   const _Palette({
     required this.background,
     required this.surface,
@@ -21,12 +31,22 @@ class _Palette {
     required this.line,
   });
 
+  /// Screen background.
   final Color background;
+
+  /// Cards, sheets and dialogs.
   final Color surface;
-  final Color ink; // texto principal
-  final Color accent; // chips seleccionados, etiquetas, iconos de opciones
+
+  /// Main text.
+  final Color ink;
+
+  /// Selected chips, labels, option icons.
+  final Color accent;
+
+  /// Borders and dividers.
   final Color line;
 
+  /// Light mode palette.
   static const light = _Palette(
     background: Color(0xFFF4F6F9),
     surface: Colors.white,
@@ -35,6 +55,7 @@ class _Palette {
     line: Color(0xFFE6E9EF),
   );
 
+  /// Dark mode palette.
   static const dark = _Palette(
     background: Color(0xFF0E1822),
     surface: Color(0xFF182532),
@@ -44,6 +65,7 @@ class _Palette {
   );
 }
 
+/// The app theme (Poppins, rounded cards and buttons) for [brightness].
 ThemeData buildAppTheme(Brightness brightness) {
   final p = brightness == Brightness.dark ? _Palette.dark : _Palette.light;
   final scheme = ColorScheme.fromSeed(
@@ -141,8 +163,9 @@ ThemeData buildAppTheme(Brightness brightness) {
     dividerTheme: DividerThemeData(color: p.line),
   );
 }
-/// Icono dentro de un cuadrado redondeado de color, como en la referencia.
+/// Icon inside a colored rounded square, as in the reference design.
 class IconTile extends StatelessWidget {
+  /// Creates a tile; tappable when [onTap] is set.
   const IconTile({
     super.key,
     required this.icon,
@@ -152,10 +175,19 @@ class IconTile extends StatelessWidget {
     this.tooltip,
   });
 
+  /// The icon.
   final IconData icon;
+
+  /// Background color.
   final Color color;
+
+  /// Side length in logical pixels.
   final double size;
+
+  /// Tap action (null = not tappable).
   final VoidCallback? onTap;
+
+  /// Accessibility label and long-press hint.
   final String? tooltip;
 
   @override
@@ -176,10 +208,12 @@ class IconTile extends StatelessWidget {
   }
 }
 
-/// Pastilla naranja con la racha.
+/// Orange pill with the streak ("🔥 8").
 class StreakPill extends StatelessWidget {
+  /// Creates the pill for a streak of [days].
   const StreakPill(this.days, {super.key});
 
+  /// Streak length.
   final int days;
 
   @override

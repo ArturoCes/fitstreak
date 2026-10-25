@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/exercise.dart';
 import '../data/exercise_repository.dart';
 
-/// Imagen del ejercicio. Los dos datasets traen la posición inicial y la
-/// final; con [animate] se alternan como si fuera un GIF.
+/// Exercise image. Both datasets have the start and end position; with
+/// [animate] they alternate like a GIF.
 class ExerciseMedia extends ConsumerStatefulWidget {
+  /// Creates the image of [exercise].
   const ExerciseMedia(
     this.exercise, {
     super.key,
@@ -17,14 +18,20 @@ class ExerciseMedia extends ConsumerStatefulWidget {
     this.fit = BoxFit.cover,
   });
 
+  /// Exercise to show.
   final Exercise exercise;
+
+  /// Alternate the frames.
   final bool animate;
+
+  /// How photos fill the box (drawings are always contained).
   final BoxFit fit;
 
   @override
   ConsumerState<ExerciseMedia> createState() => _ExerciseMediaState();
 }
 
+/// Runs the frame timer while animating.
 class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
   static const _frameDuration = Duration(milliseconds: 1100);
 
@@ -46,6 +53,7 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
     }
   }
 
+  /// Starts or stops the frame timer according to `animate`.
   void _syncTimer() {
     _timer?.cancel();
     _timer = widget.animate
@@ -72,7 +80,7 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
       );
     }
     final url = urls[_frame % urls.length];
-    // Los dibujos son de línea: recortarlos corta la figura, mejor enteros.
+    // Drawings are line art: cropping cuts the figure, so keep them whole.
     final fit = drawings && widget.exercise.drawings.isNotEmpty ? BoxFit.contain : widget.fit;
     Widget image(String u) => Image(
           image: CachedNetworkImageProvider(u),
@@ -85,12 +93,12 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
         );
 
     return ColoredBox(
-      // Los dibujos son de línea sobre blanco: mismo fondo para las fotos.
+      // Drawings are lines on white: same background for photos.
       color: Colors.white,
       child: !widget.animate || urls.length < 2
           ? image(urls.first)
-          // Los fotogramas se apilan y solo cambia la opacidad: cada imagen se
-          // carga una vez y no se corta su descarga al pasar de fotograma.
+          // Frames are stacked and only their opacity changes: each image
+          // loads once and its download isn't cut when the frame changes.
           : Stack(
               fit: StackFit.expand,
               children: [
@@ -106,8 +114,9 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
   }
 }
 
-/// Selector "Fotos / Dibujos" que guarda la preferencia.
+/// "Fotos / Dibujos" switch that saves the preference.
 class MediaStyleToggle extends ConsumerWidget {
+  /// Creates the switch.
   const MediaStyleToggle({super.key});
 
   @override

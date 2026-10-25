@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Atajos al mantener pulsado el icono. Google Assistant / Bixby también
+     pueden abrirlos por voz ("abre Resumen de hoy en FitStreak"). -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="summary_today"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_today_short"
+        android:shortcutLongLabel="@string/shortcut_today_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.arturoc.fitstreak"
+            android:targetClass="com.arturoc.fitstreak.MainActivity"
+            android:data="fitstreak://summary/today"/>
+    </shortcut>
+    <shortcut
+        android:shortcutId="summary_week"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_week_short"
+        android:shortcutLongLabel="@string/shortcut_week_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.arturoc.fitstreak"
+            android:targetClass="com.arturoc.fitstreak.MainActivity"
+            android:data="fitstreak://summary/week"/>
+    </shortcut>
+</shortcuts>

@@ -1,5 +1,5 @@
 name: fitstreak
-description: "A new Flutter project."
+description: "Workout routines with a streak, progress and voice summaries."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -43,7 +43,18 @@ dependencies:
   flutter_timezone: ^5.1.1
   google_fonts: ^8.0.0
   fl_chart: ^1.2.0
-
+  image_picker: ^1.2.4
+  path_provider: ^2.1.6
+  flutter_overlay_window:
+    # Copia local con el toque de la burbuja resuelto en nativo (ver OverlayService.openHostApp).
+    path: packages/flutter_overlay_window
+  file_picker: ^13.1.0
+  archive: ^4.5.2
+  share_plus: ^13.3.1
+  supabase_flutter: ^2.18.3
+  home_widget: ^0.10.0
+  health: ^13.3.2
+  flutter_tts: ^4.2.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,6 +81,9 @@ flutter:
     - assets/data/exercises.json
     - assets/data/drawings.json
     - assets/data/instructions_es.json
+    - assets/data/quotes.json
+    # Poppins empaquetada (licencia OFL): la app no depende de internet para arrancar.
+    - google_fonts/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

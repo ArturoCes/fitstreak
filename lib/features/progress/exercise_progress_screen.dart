@@ -8,26 +8,43 @@ import '../../data/progression.dart';
 import '../../ui/exercise_media.dart';
 import '../../ui/theme.dart';
 
+/// What the chart shows.
 enum _Metric {
+  /// Heaviest weight of each session.
   weight('Peso máx.', 'kg'),
+
+  /// Estimated one-rep max (Epley).
   oneRm('1RM estimado', 'kg'),
+
+  /// Reps of the best set.
   reps('Repeticiones', 'reps'),
+
+  /// Sum of reps × kg.
   volume('Volumen', '');
 
+  /// Creates a metric with its label and unit.
   const _Metric(this.label, this.unit);
+
+  /// Spanish label.
   final String label;
+
+  /// Unit shown on the axis.
   final String unit;
 }
 
+/// Progress chart and session history of one exercise.
 class ExerciseProgressScreen extends ConsumerStatefulWidget {
+  /// Creates the screen for exercise [id].
   const ExerciseProgressScreen({super.key, required this.id});
 
+  /// Exercise id.
   final String id;
 
   @override
   ConsumerState<ExerciseProgressScreen> createState() => _ExerciseProgressScreenState();
 }
 
+/// Holds the selected metric.
 class _ExerciseProgressScreenState extends ConsumerState<ExerciseProgressScreen> {
   _Metric? _metric;
 
@@ -56,7 +73,7 @@ class _ExerciseProgressScreenState extends ConsumerState<ExerciseProgressScreen>
     return Scaffold(
       appBar: AppBar(title: const Text('Progreso')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 24 + MediaQuery.paddingOf(context).bottom),
         children: [
           Row(
             children: [
@@ -114,11 +131,18 @@ class _ExerciseProgressScreenState extends ConsumerState<ExerciseProgressScreen>
   }
 }
 
+/// Line chart of one metric per session.
 class _LineChart extends StatelessWidget {
+  /// Creates the chart.
   const _LineChart({required this.values, required this.dates, required this.unit});
 
+  /// One value per session.
   final List<double> values;
+
+  /// Session dates, same order as [values].
   final List<DateTime> dates;
+
+  /// Axis unit.
   final String unit;
 
   @override
@@ -127,7 +151,7 @@ class _LineChart extends StatelessWidget {
     final minY = values.reduce((a, b) => a < b ? a : b);
     final maxY = values.reduce((a, b) => a > b ? a : b);
     final pad = maxY == minY ? (maxY == 0 ? 1 : maxY * 0.1) : (maxY - minY) * 0.15;
-    // Con muchas sesiones, etiqueta solo algunas fechas para que no se pisen.
+    // With many sessions, label only some dates so they don't overlap.
     final every = (values.length / 5).ceil().clamp(1, 1000);
 
     return LineChart(

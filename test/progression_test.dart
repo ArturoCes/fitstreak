@@ -58,23 +58,26 @@ void main() {
     expect(p.levelUp, isFalse);
   });
 
-  test('si llegas al tope del rango en todas las series, sube el peso', () {
+  test('si llegas al tope del rango, propone subir peso pero rellena lo que hiciste', () {
     final sets = [for (var i = 0; i < 3; i++) const SetLog(reps: 10, weightKg: 4)];
     final last = ExerciseLog(exerciseId: 'curl', sets: sets);
     final p = planSets(item('curl'), curl, last); // rango 8-10
     expect(p.levelUp, isTrue);
-    expect(p.sets.first.weightKg, 5); // +1 kg en mancuernas
-    expect(p.sets.first.reps, 8); // vuelve al mínimo con más peso
+    // Lo que se rellena: tus 10 reps con 4 kg.
+    expect((p.sets.first.reps, p.sets.first.weightKg), (10, 4));
+    // La propuesta para progresar: +1 kg en mancuernas, vuelta al mínimo.
+    expect((p.levelUpSets!.first.reps, p.levelUpSets!.first.weightKg), (8, 5));
   });
 
-  test('sin llegar al tope repite tus mejores números por serie', () {
+  test('sin llegar al tope repite tus números exactos por serie', () {
     const last = ExerciseLog(exerciseId: 'curl', sets: [
       SetLog(reps: 10, weightKg: 6),
       SetLog(reps: 9, weightKg: 6),
       SetLog(reps: 7, weightKg: 6),
     ]);
     final p = planSets(item('curl'), curl, last);
-    expect(p.sets.map((s) => s.reps), [10, 9, 8]); // nunca por debajo del mínimo
+    expect(p.sets.map((s) => s.reps), [10, 9, 7]); // lo que hiciste, serie a serie
+    expect(p.levelUpSets, isNull);
     expect(p.sets.every((s) => s.weightKg == 6), isTrue);
   });
 
@@ -84,8 +87,9 @@ void main() {
       sets: [for (var i = 0; i < 3; i++) const SetLog(reps: 10)],
     );
     final p = planSets(item('pushups'), pushups, last);
-    expect(p.sets.every((s) => s.weightKg == null && s.reps == 11), isTrue);
+    expect(p.sets.every((s) => s.weightKg == null && s.reps == 10), isTrue);
     expect(p.levelUp, isTrue);
+    expect(p.levelUpSets!.every((s) => s.reps == 11), isTrue);
   });
 
   test('la sesión anterior es la más reciente', () {

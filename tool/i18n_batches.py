@@ -1,11 +1,11 @@
-"""Herramientas para traducir las instrucciones de los ejercicios.
+"""Tools to translate the exercise instructions (assets/data/instructions_es.json).
 
-  dump  <exercises.json> <out_dir>       → lotes de texto para traducir
-  merge <exercises.json> <tr_dir> <out>  → une los lotes traducidos y valida
+  dump  <exercises.json> <out_dir>       -> text batches to translate
+  merge <exercises.json> <tr_dir> <out>  -> joins the translated batches and validates them
 
-Los lotes traducidos son JSON {id: [paso, paso, ...]} con el mismo número de
-pasos que el original. Los ejercicios de fuerza van primero porque son los que
-usa el generador de rutinas.
+Translated batches are JSON {id: [step, step, ...]} with the same number of
+steps as the original. Strength exercises go first because the routine
+generator uses them.
 """
 import json
 import os
@@ -15,16 +15,20 @@ BATCH_CHARS = 22000
 
 
 def load(path):
+    """Reads a UTF-8 JSON file."""
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
 def ordered(exercises):
+    """Strength and powerlifting exercises first, then the rest, by id."""
     strength = {"strength", "powerlifting"}
     return sorted(exercises, key=lambda e: (e["category"] not in strength, e["id"]))
 
 
 def dump(src, out_dir):
+    """Writes the instructions of src as numbered text batches of about
+    BATCH_CHARS characters into out_dir."""
     os.makedirs(out_dir, exist_ok=True)
     batch, size, n = [], 0, 0
     for e in ordered(load(src)):
@@ -44,11 +48,14 @@ def dump(src, out_dir):
 
 
 def write_batch(out_dir, n, chunks):
+    """Writes batch number n (01.txt, 02.txt...)."""
     with open(os.path.join(out_dir, f"{n:02d}.txt"), "w", encoding="utf-8") as f:
         f.write("\n\n".join(chunks))
 
 
 def merge(src, tr_dir, out):
+    """Joins the translated JSON batches of tr_dir into out, skipping unknown
+    ids and entries whose step count doesn't match, and prints a report."""
     original = {e["id"]: e["instructions"] for e in load(src)}
     merged, problems = {}, []
     for name in sorted(os.listdir(tr_dir)):

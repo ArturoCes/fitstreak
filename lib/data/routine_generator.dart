@@ -5,14 +5,23 @@ import 'exercise.dart';
 import 'routine.dart';
 import 'user_profile.dart';
 
-/// Un hueco de la rutina: qué tipo de ejercicio queremos, no cuál en concreto.
+/// A slot in a routine template: the kind of exercise wanted, not a
+/// specific one.
 class Slot {
+  /// Creates a slot shown as [label] that works [muscles].
   const Slot(this.label, this.muscles, {this.force, this.mechanic});
 
+  /// Spanish label shown above the exercise ("Empuje de pecho").
   final String label;
+
+  /// Target muscles; the first one is the main target.
   final Set<String> muscles;
-  final String? force; // push | pull | static
-  final String? mechanic; // compound | isolation
+
+  /// Preferred force: `push`, `pull` or `static` (null = any).
+  final String? force;
+
+  /// Preferred mechanic: `compound` or `isolation` (null = any).
+  final String? mechanic;
 }
 
 const _squat = Slot('Pierna (sentadilla)', {'quadriceps'}, mechanic: 'compound');
@@ -55,7 +64,7 @@ const _triceps = Slot('Tríceps', {'triceps'}, force: 'push');
 const _calves = Slot('Gemelos', {'calves'});
 const _core = Slot('Core', {'abdominals'});
 
-// Ordenados por prioridad: si la sesión es corta se cortan los últimos.
+// Ordered by priority: in short sessions the last ones are dropped.
 const _fullA = [_squat, _chestPress, _verticalPull, _hinge, _shoulderPress, _core, _biceps, _triceps];
 const _fullB = [_hinge, _shoulderPress, _row, _squat, _chestPress, _core, _calves, _triceps];
 const _fullC = [_squat, _chestPress, _row, _glutes, _lateral, _core, _biceps, _calves];
@@ -64,6 +73,8 @@ const _lower = [_squat, _hinge, _glutes, _quadIso, _hamIso, _calves, _core];
 const _push = [_chestPress, _shoulderPress, _chestPress, _lateral, _triceps, _chestIso, _triceps];
 const _pull = [_verticalPull, _row, _row, _biceps, _core, _biceps, _lateral];
 
+/// Day names and templates for the training days per week: full body for
+/// 2-3 days, upper/lower for 4, push/pull/legs for 5-6.
 List<(String, List<Slot>)> splitFor(int days) => switch (days) {
       <= 2 => [('Cuerpo completo A', _fullA), ('Cuerpo completo B', _fullB)],
       3 => [
@@ -94,6 +105,7 @@ List<(String, List<Slot>)> splitFor(int days) => switch (days) {
         ],
     };
 
+/// Exercises that fit in a session of [minutes].
 int exercisesPerSession(int minutes) => switch (minutes) {
       <= 30 => 4,
       <= 45 => 5,
@@ -101,7 +113,7 @@ int exercisesPerSession(int minutes) => switch (minutes) {
       _ => 7,
     };
 
-/// Ejercicios conocidos que preferimos frente a variantes raras del dataset.
+/// Well-known exercises preferred over rare variants in the dataset.
 const _staples = {
   'Barbell_Squat', 'Goblet_Squat', 'Dumbbell_Squat', 'Bodyweight_Squat',
   'Leg_Press', 'Hack_Squat', 'Dumbbell_Lunges',
@@ -117,7 +129,7 @@ const _staples = {
   'Triceps_Pushdown', 'Dips_-_Triceps_Version', 'Bench_Dips',
   'Leg_Extensions', 'Lying_Leg_Curls', 'Standing_Calf_Raises',
   'Plank', 'Crunches', 'Air_Bike', 'Hanging_Leg_Raise',
-  // Peso corporal, para quien entrena en casa sin material.
+  // Bodyweight, for people training at home without equipment.
   'Incline_Push-Up', 'Decline_Push-Up', 'Single_Leg_Glute_Bridge',
   'Glute_Kickback', 'Natural_Glute_Ham_Raise',
 };
@@ -125,17 +137,24 @@ const _staples = {
 const _routineCategories = {'strength', 'powerlifting'};
 const _levelOrder = ['beginner', 'intermediate', 'expert'];
 
+/// Builds a routine for a profile and finds substitutes for an exercise,
+/// using only exercises the user can do with their equipment and injuries.
 class RoutineGenerator {
+  /// Creates a generator; a fixed [seed] makes the result reproducible.
   RoutineGenerator(this.profile, this.all, {int? seed}) : _rng = Random(seed);
 
+  /// The user the routine is for.
   final UserProfile profile;
+
+  /// The whole catalog.
   final List<Exercise> all;
+
   final Random _rng;
 
   late final Map<String, Exercise> _byId = {for (final e in all) e.id: e};
 
-  /// Ejercicios que este usuario puede hacer: tiene el equipo, no los ha
-  /// bloqueado y no chocan con sus lesiones.
+  /// Exercises this user can do: they have the equipment, haven't blocked
+  /// them and they don't clash with their injuries.
   late final List<Exercise> usable = [
     for (final e in all)
       if (_routineCategories.contains(e.category) &&
@@ -145,9 +164,13 @@ class RoutineGenerator {
         e,
   ];
 
+  /// The user's level as an index of [_levelOrder].
   int get _userLevel => profile.level.index;
+
+  /// The exercise's level as an index of [_levelOrder].
   int _levelOf(Exercise e) => _levelOrder.indexOf(e.level);
 
+  /// A full routine for the profile's days per week and session length.
   Routine generate() {
     final perSession = exercisesPerSession(profile.minutesPerSession);
     final used = <String>{};
@@ -162,8 +185,9 @@ class RoutineGenerator {
     );
   }
 
-  /// Si un hueco no se puede cubrir (p. ej. dorsal sin barra ni bandas),
-  /// se pasa al siguiente de la plantilla para no dejar el día corto.
+  /// Picks up to [count] exercises for a day. When a slot can't be filled
+  /// (e.g. lats without a bar or bands) the next one in the template is used
+  /// so the day isn't left short.
   List<RoutineItem> _fillDay(List<Slot> slots, int count, Set<String> used) {
     final items = <RoutineItem>[];
     for (final slot in slots) {
@@ -173,8 +197,11 @@ class RoutineGenerator {
     return items;
   }
 
-  /// Otras opciones para el hueco que ocupa [current], de mejor a peor.
+  /// Other options for the slot [current] fills, best first.
   List<Exercise> alternatives(Exercise current, {int limit = 10}) {
+    // Custom exercises (imported routine) have no muscles: there is nothing
+    // to compare with, they are swapped by searching the catalog.
+    if (current.primaryMuscles.isEmpty) return const [];
     final slot = Slot(
       'alt',
       current.primaryMuscles.toSet(),
@@ -186,13 +213,14 @@ class RoutineGenerator {
     return ranked.take(limit).toList();
   }
 
+  /// The best exercise for [slot] not in [used] (it gets added to [used]).
   Exercise? _pick(Slot slot, Set<String> used) {
     var options = _candidates(slot, exclude: used);
-    // Mejor repetir un ejercicio de otro día que dejar el hueco vacío.
+    // Better to repeat an exercise from another day than to leave a gap.
     if (options.isEmpty) options = _candidates(slot);
     if (options.isEmpty) return null;
 
-    // Algo de variedad entre los mejor puntuados.
+    // Some variety among the top scored.
     final scored = [for (final e in options) (e, _score(e, slot) + _rng.nextDouble() * 2)]
       ..sort((a, b) => b.$2.compareTo(a.$2));
     final pick = scored.first.$1;
@@ -200,8 +228,9 @@ class RoutineGenerator {
     return pick;
   }
 
-  /// Si no hay nada que cumpla todo, se relaja: primero la mecánica, luego el
-  /// tipo de fuerza y por último el nivel.
+  /// Usable exercises for [slot]. When nothing matches everything the
+  /// filters are relaxed: first the mechanic, then the force and finally
+  /// the level.
   List<Exercise> _candidates(Slot slot, {Set<String> exclude = const {}}) {
     bool base(Exercise e) =>
         !exclude.contains(e.id) && e.primaryMuscles.any(slot.muscles.contains);
@@ -209,8 +238,8 @@ class RoutineGenerator {
     bool forceOk(Exercise e) => slot.force == null || e.force == slot.force;
     bool mechOk(Exercise e) => slot.mechanic == null || e.mechanic == slot.mechanic;
 
-    // Nunca más de un nivel por encima: mejor dejar el hueco vacío que darle
-    // a un principiante flexiones en pino.
+    // Never more than one level above: better an empty slot than giving a
+    // beginner handstand push-ups.
     bool oneAbove(Exercise e) => _levelOf(e) <= _userLevel + 1;
 
     final passes = <bool Function(Exercise)>[
@@ -226,20 +255,23 @@ class RoutineGenerator {
     return [];
   }
 
+  /// How well [e] fits [slot]: staples, loaded exercises, matching mechanic
+  /// and force, main muscle and closeness to the user's level score higher.
   double _score(Exercise e, Slot slot) {
     var s = 0.0;
     if (_staples.contains(e.id)) s += 10;
-    // Si tiene material, mejor con carga que con el propio peso (los
-    // candidatos ya vienen filtrados por el equipo disponible).
+    // With equipment, loaded beats bodyweight (candidates are already
+    // filtered by the available equipment).
     if (e.equipmentOrBody != 'body only') s += 3;
     if (slot.mechanic != null && e.mechanic == slot.mechanic) s += 3;
     if (slot.force != null && e.force == slot.force) s += 2;
-    // El primer músculo del hueco es el principal.
+    // The slot's first muscle is the main one.
     if (e.primaryMuscles.contains(slot.muscles.first)) s += 1;
     s -= (_userLevel - _levelOf(e)).abs() * 1.5;
     return s;
   }
 
+  /// Sets, reps and rest for [e] in [slot] according to the goal and level.
   RoutineItem _item(Slot slot, Exercise e) {
     final compound = e.mechanic == 'compound';
     var (sets, reps, rest) = switch ((profile.goal, compound)) {
@@ -263,5 +295,6 @@ class RoutineGenerator {
     );
   }
 
+  /// The catalog exercise with [id], if any.
   Exercise? byId(String id) => _byId[id];
 }
