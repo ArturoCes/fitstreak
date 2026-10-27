@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/active_workout.dart';
 import '../../data/app_state.dart';
+import '../../data/backup.dart';
 import '../../data/exercise.dart';
 import '../../data/exercise_repository.dart';
 import '../../data/labels_es.dart';
@@ -310,6 +311,18 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
               title: const Text('Créditos de imágenes'),
               onTap: () => Navigator.pop(sheet, 'credits'),
             ),
+            ListTile(
+              leading: const IconTile(icon: Icons.save_alt, color: AppColors.teal, size: 36),
+              title: const Text('Guardar copia de seguridad'),
+              subtitle: const Text('Racha, historial, rutina y ajustes en un archivo'),
+              onTap: () => Navigator.pop(sheet, 'backup'),
+            ),
+            ListTile(
+              leading: const IconTile(icon: Icons.restore, color: AppColors.orange, size: 36),
+              title: const Text('Restaurar copia'),
+              subtitle: const Text('Recupera tus datos desde un archivo de copia'),
+              onTap: () => Navigator.pop(sheet, 'restore'),
+            ),
             const Divider(),
             ListTile(
               leading: IconTile(icon: Icons.delete_forever_outlined, color: Theme.of(sheet).colorScheme.error, size: 36),
@@ -414,6 +427,21 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
         if (sure == true && context.mounted) await wipeAllData(context, ref);
       case 'credits':
         showDialog<void>(context: context, builder: (_) => const _CreditsDialog());
+      case 'backup':
+        await shareBackup(ref);
+      case 'restore':
+        final sure = await showDialog<bool>(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: const Text('¿Restaurar una copia?'),
+            content: const Text('Tus datos actuales se sustituirán por los del archivo que elijas.'),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancelar')),
+              FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Elegir archivo')),
+            ],
+          ),
+        );
+        if (sure == true && context.mounted) await pickAndRestoreBackup(context, ref);
     }
   }
 
