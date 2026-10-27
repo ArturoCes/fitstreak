@@ -54,7 +54,10 @@ android {
         release {
             // Without key.properties (another machine) it falls back to the debug
             // key, which Google Play rejects.
-            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
+            // FITSTREAK_DEBUG_SIGNING=1 signs with the debug key, to update an
+            // install that came from a debug-signed APK without losing its data.
+            signingConfig = if (System.getenv("FITSTREAK_DEBUG_SIGNING") != null) signingConfigs.getByName("debug")
+                else signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
