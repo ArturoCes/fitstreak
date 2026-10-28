@@ -65,7 +65,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     final byId = {for (final e in exercises) e.id: e};
     final item = w.items[w.exercise];
     final ex = byId[item.exerciseId]!;
-    final plan = planSets(item, ex, lastSession(ref.watch(workoutLogsProvider), item.exerciseId));
+    final plan = planSets(item, ex, lastSession(ref.watch(workoutLogsProvider), item.exerciseId, dayName: w.dayName));
     final weighted = usesWeight(ex);
     final timed = isTimed(item);
     final maxReps = timed ? maxHoldSeconds : maxSetReps;

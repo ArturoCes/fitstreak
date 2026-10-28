@@ -19,10 +19,10 @@ Exercise ex(String id, String? equipment) => Exercise(
 RoutineItem item(String id, {int sets = 3, String reps = '8-10'}) =>
     RoutineItem(exerciseId: id, slot: 'x', sets: sets, reps: reps, restSeconds: 60);
 
-WorkoutLog log(DateTime date, String id, List<SetLog> sets) => WorkoutLog(
+WorkoutLog log(DateTime date, String id, List<SetLog> sets, {String day = 'A'}) => WorkoutLog(
       date: date,
       dayIndex: 0,
-      dayName: 'A',
+      dayName: day,
       setsDone: sets.length,
       setsTotal: sets.length,
       durationSeconds: 600,
@@ -99,6 +99,17 @@ void main() {
     ];
     expect(lastSession(logs, 'curl')!.sets.first.weightKg, 3);
     expect(lastSession(logs, 'otro'), isNull);
+  });
+
+  test('cada día sugiere lo que se hizo ese día', () {
+    final logs = [
+      log(DateTime(2026, 10, 20), 'curl', const [SetLog(reps: 12, weightKg: 20)], day: 'Empuje'),
+      log(DateTime(2026, 10, 21), 'curl', const [SetLog(reps: 12, weightKg: 1)], day: 'Tirón'),
+    ];
+    expect(lastSession(logs, 'curl', dayName: 'Empuje')!.sets.first.weightKg, 20);
+    expect(lastSession(logs, 'curl', dayName: 'Tirón')!.sets.first.weightKg, 1);
+    // Never done on leg day: the last time on any day.
+    expect(lastSession(logs, 'curl', dayName: 'Pierna')!.sets.first.weightKg, 1);
   });
 
   test('puntos de progreso y 1RM estimado', () {

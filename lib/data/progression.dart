@@ -64,13 +64,21 @@ class SetPlan {
 }
 
 /// Last logged session of an exercise ([logs] go from oldest to newest).
-ExerciseLog? lastSession(List<WorkoutLog> logs, String exerciseId) {
+///
+/// With [dayName], the last time it was done on that routine day comes
+/// first: a curl can be light on push day and heavy on pull day, and each
+/// day should suggest its own numbers. If it was never done that day, the
+/// last time on any day.
+ExerciseLog? lastSession(List<WorkoutLog> logs, String exerciseId, {String? dayName}) {
+  ExerciseLog? any;
   for (final log in logs.reversed) {
     for (final e in log.exercises) {
-      if (e.exerciseId == exerciseId && e.sets.isNotEmpty) return e;
+      if (e.exerciseId != exerciseId || e.sets.isEmpty) continue;
+      if (dayName == null || log.dayName == dayName) return e;
+      any ??= e;
     }
   }
-  return null;
+  return any;
 }
 
 /// Today's proposal: the same as last time, set by set (weight and reps). If

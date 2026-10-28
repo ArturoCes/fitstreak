@@ -237,7 +237,7 @@ class ActiveWorkoutNotifier extends Notifier<ActiveWorkout?> {
       sets: [
         for (final item in items)
           [
-            for (final s in planSets(item, byId[item.exerciseId]!, lastSession(logs, item.exerciseId)).sets)
+            for (final s in planSets(item, byId[item.exerciseId]!, lastSession(logs, item.exerciseId, dayName: day.name)).sets)
               SetEntry(reps: s.reps, kg: s.weightKg),
           ],
       ],
