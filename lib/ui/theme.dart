@@ -86,7 +86,7 @@ class _Palette {
     surface: Colors.white,
     ink: AppColors.navy,
     accent: AppColors.navy,
-    line: Color(0xFFE6E9EF),
+    line: Color(0xFFDDE2EA),
     muted: AppColors.muted,
   );
 
@@ -145,7 +145,11 @@ ThemeData buildAppTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      // A thin border: white cards on the light grey background need an edge.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: p.line),
+      ),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
