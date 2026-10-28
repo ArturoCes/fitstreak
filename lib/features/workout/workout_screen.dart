@@ -375,6 +375,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(56),
         backgroundColor: w.allDone && !w.paused && _editing == null ? AppColors.orange : null,
+        foregroundColor: w.allDone && !w.paused && _editing == null ? AppColors.navy : null,
         textStyle: Theme.of(context).textTheme.titleMedium,
       ),
       onPressed: onTap,
@@ -1011,7 +1012,7 @@ class _HoldTimer extends StatelessWidget {
           ),
           running
               ? FilledButton.icon(
-                  style: FilledButton.styleFrom(backgroundColor: AppColors.orange),
+                  style: FilledButton.styleFrom(backgroundColor: AppColors.orange, foregroundColor: AppColors.navy),
                   onPressed: onStop,
                   icon: const Icon(Icons.stop_rounded),
                   label: const Text('Parar'),
@@ -1329,12 +1330,12 @@ class _Hint extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.orange),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: readableOn(context, AppColors.orange)),
             ),
           ),
           if (actionLabel != null)
             TextButton(
-              style: TextButton.styleFrom(foregroundColor: AppColors.orange, visualDensity: VisualDensity.compact),
+              style: TextButton.styleFrom(foregroundColor: readableOn(context, AppColors.orange), visualDensity: VisualDensity.compact),
               onPressed: onAction,
               child: Text(actionLabel!),
             ),

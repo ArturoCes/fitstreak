@@ -703,7 +703,7 @@ class _ItemTile extends StatelessWidget {
                     style: text.titleSmall,
                   ),
                   for (final a in item.alts)
-                    Text('o ${a.name}', style: text.bodySmall?.copyWith(color: AppColors.teal)),
+                    Text('o ${a.name}', style: text.bodySmall?.copyWith(color: readableOn(context, AppColors.teal))),
                   Row(
                     children: [
                       Icon(icon, size: 14, color: color),

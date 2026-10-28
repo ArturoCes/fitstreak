@@ -251,7 +251,7 @@ class _PublishedSheetState extends ConsumerState<_PublishedSheet> {
               dirty
                   ? 'Has cambiado tu rutina desde la última vez. Tus seguidores aún ven la versión anterior.'
                   : 'Tus seguidores tienen la misma versión que tú.',
-              style: text.bodyMedium?.copyWith(color: dirty ? AppColors.orange : null),
+              style: text.bodyMedium?.copyWith(color: dirty ? readableOn(context, AppColors.orange) : null),
             ),
             const SizedBox(height: 8),
             SwitchListTile(

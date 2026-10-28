@@ -526,7 +526,7 @@ class _HeroCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.teal, AppColors.tealDark],
+          colors: [AppColors.tealDark, AppColors.tealDeep],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -553,6 +553,7 @@ class _HeroCard extends StatelessWidget {
                 FilledButton.icon(
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.orange,
+                    foregroundColor: AppColors.navy,
                     minimumSize: const Size(0, 44),
                   ),
                   onPressed: onStart,
@@ -623,7 +624,7 @@ class _ItemCard extends ConsumerWidget {
                   children: [
                     Text(
                       item.slot.toUpperCase(),
-                      style: text.labelSmall?.copyWith(color: AppColors.teal, letterSpacing: 0.8),
+                      style: text.labelSmall?.copyWith(color: readableOn(context, AppColors.teal), letterSpacing: 0.8),
                     ),
                     Text(exercise.name, style: text.titleMedium, maxLines: 2, overflow: TextOverflow.ellipsis),
                     Text(

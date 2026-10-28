@@ -1,23 +1,53 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Palette inspired by the user's reference design: light background, navy
 /// for text and dark blocks, teal as main color and orange as accent.
+///
+/// Contrast (WCAG): white text only goes on [tealDark] or darker (4.6:1);
+/// on [orange] the text is [navy] (6.5:1). Colored text on a background goes
+/// through [readableOn].
 abstract final class AppColors {
   /// Navy: text and dark blocks in light mode.
   static const navy = Color(0xFF13293D);
 
-  /// Teal: main color.
-  static const teal = Color(0xFF1FAE84);
+  /// Teal: main color for icons, charts and accents (3:1 on both themes).
+  static const teal = Color(0xFF169E78);
 
-  /// Darker teal for gradients and secondary accents.
-  static const tealDark = Color(0xFF168A68);
+  /// Darker teal: filled buttons and cards with white text.
+  static const tealDark = Color(0xFF0E8566);
 
-  /// Orange: accent (call to action, streak, warnings).
+  /// Deepest teal, end of the gradients.
+  static const tealDeep = Color(0xFF0A6650);
+
+  /// Orange: accent fills (call to action, streak, warnings).
   static const orange = Color(0xFFF7931E);
 
-  /// Grey for secondary text.
-  static const muted = Color(0xFF8A94A6);
+  /// Grey for secondary text (4.7:1 on white).
+  static const muted = Color(0xFF6B7385);
+}
+
+/// [color] adjusted until it reads as text on the current theme's surface
+/// (4.5:1): darker in light mode, lighter in dark mode. Keeps the hue, so
+/// an orange warning stays orange.
+Color readableOn(BuildContext context, Color color) {
+  final theme = Theme.of(context);
+  final background = theme.colorScheme.surface;
+  final dark = theme.brightness == Brightness.dark;
+  var hsl = HSLColor.fromColor(color);
+  for (var i = 0; i < 20 && _contrast(hsl.toColor(), background) < 4.5; i++) {
+    final l = (hsl.lightness + (dark ? 0.03 : -0.03)).clamp(0.0, 1.0);
+    hsl = hsl.withLightness(l);
+  }
+  return hsl.toColor();
+}
+
+/// WCAG contrast ratio between [a] and [b].
+double _contrast(Color a, Color b) {
+  final la = a.computeLuminance(), lb = b.computeLuminance();
+  return (max(la, lb) + 0.05) / (min(la, lb) + 0.05);
 }
 
 /// Colors that change between light and dark mode.
@@ -29,6 +59,7 @@ class _Palette {
     required this.ink,
     required this.accent,
     required this.line,
+    required this.muted,
   });
 
   /// Screen background.
@@ -46,6 +77,9 @@ class _Palette {
   /// Borders and dividers.
   final Color line;
 
+  /// Secondary text.
+  final Color muted;
+
   /// Light mode palette.
   static const light = _Palette(
     background: Color(0xFFF4F6F9),
@@ -53,6 +87,7 @@ class _Palette {
     ink: AppColors.navy,
     accent: AppColors.navy,
     line: Color(0xFFE6E9EF),
+    muted: AppColors.muted,
   );
 
   /// Dark mode palette.
@@ -62,6 +97,7 @@ class _Palette {
     ink: Color(0xFFE8EEF4),
     accent: Color(0xFF4F86B8),
     line: Color(0xFF2A3a4A),
+    muted: Color(0xFF9AA4B6),
   );
 }
 
@@ -71,10 +107,10 @@ ThemeData buildAppTheme(Brightness brightness) {
   final scheme = ColorScheme.fromSeed(
     seedColor: AppColors.teal,
     brightness: brightness,
-    primary: AppColors.teal,
+    primary: AppColors.tealDark,
     onPrimary: Colors.white,
     secondary: AppColors.orange,
-    onSecondary: Colors.white,
+    onSecondary: AppColors.navy,
     surface: p.surface,
     onSurface: p.ink,
     tertiary: p.accent,
@@ -95,7 +131,7 @@ ThemeData buildAppTheme(Brightness brightness) {
       headlineSmall: text.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
       titleLarge: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
       titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-      bodySmall: text.bodySmall?.copyWith(color: AppColors.muted),
+      bodySmall: text.bodySmall?.copyWith(color: p.muted),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: p.background,
@@ -231,7 +267,7 @@ class StreakPill extends StatelessWidget {
       ),
       child: Text(
         '🔥 $days',
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.orange),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: readableOn(context, AppColors.orange)),
       ),
     );
   }

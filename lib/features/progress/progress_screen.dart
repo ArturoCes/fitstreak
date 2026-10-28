@@ -263,7 +263,7 @@ class _ExerciseTile extends StatelessWidget {
                 Text(
                   delta,
                   style: text.labelLarge?.copyWith(
-                    color: delta.startsWith('+') ? AppColors.teal : AppColors.orange,
+                    color: readableOn(context, delta.startsWith('+') ? AppColors.teal : AppColors.orange),
                   ),
                 ),
               const Icon(Icons.chevron_right),

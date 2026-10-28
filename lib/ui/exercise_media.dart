@@ -33,7 +33,11 @@ class ExerciseMedia extends ConsumerStatefulWidget {
 
 /// Runs the frame timer while animating.
 class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
-  static const _frameDuration = Duration(milliseconds: 1100);
+  /// Time each pose is on screen, fade included.
+  static const _frameDuration = Duration(milliseconds: 1600);
+
+  /// Cross-fade between poses: long and eased so it reads as movement.
+  static const _fadeDuration = Duration(milliseconds: 900);
 
   Timer? _timer;
   int _frame = 0;
@@ -79,7 +83,7 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
         child: Center(child: Icon(Icons.fitness_center, color: Colors.black26)),
       );
     }
-    final url = urls[_frame % urls.length];
+    final current = _frame % urls.length;
     // Drawings are line art: cropping cuts the figure, so keep them whole.
     final fit = drawings && widget.exercise.drawings.isNotEmpty ? BoxFit.contain : widget.fit;
     Widget image(String u) => Image(
@@ -99,14 +103,18 @@ class _ExerciseMediaState extends ConsumerState<ExerciseMedia> {
           ? image(urls.first)
           // Frames are stacked and only their opacity changes: each image
           // loads once and its download isn't cut when the frame changes.
+          // The first one stays opaque underneath, so fading the others in
+          // and out never shows the white background halfway.
           : Stack(
               fit: StackFit.expand,
               children: [
-                for (final u in urls)
+                image(urls.first),
+                for (var i = 1; i < urls.length; i++)
                   AnimatedOpacity(
-                    opacity: u == url ? 1 : 0,
-                    duration: const Duration(milliseconds: 250),
-                    child: image(u),
+                    opacity: i == current ? 1 : 0,
+                    duration: _fadeDuration,
+                    curve: Curves.easeInOut,
+                    child: image(urls[i]),
                   ),
               ],
             ),

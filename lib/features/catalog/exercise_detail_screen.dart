@@ -140,7 +140,7 @@ class _Tag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(color: color),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(color: readableOn(context, color)),
       ),
     );
   }
