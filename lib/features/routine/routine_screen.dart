@@ -233,6 +233,7 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
         child: ListView(
           shrinkWrap: true,
           children: [
+            const _SheetSection('Tu rutina'),
             ListTile(
               leading: const IconTile(icon: Icons.upload_file, color: AppColors.orange, size: 36),
               title: const Text('Importar mi rutina'),
@@ -267,12 +268,6 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
                 onTap: () => Navigator.pop(sheet, 'following'),
               ),
             ListTile(
-              leading: const IconTile(icon: Icons.alternate_email, color: AppColors.tealDark, size: 36),
-              title: const Text('Cuenta'),
-              subtitle: const Text('Email opcional para no perder tu rutina publicada'),
-              onTap: () => Navigator.pop(sheet, 'account'),
-            ),
-            ListTile(
               leading: const IconTile(icon: Icons.refresh, color: AppColors.teal, size: 36),
               title: const Text('Generar otra rutina'),
               onTap: () => Navigator.pop(sheet, 'regen'),
@@ -282,6 +277,8 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
               title: const Text('Cambiar mis datos'),
               onTap: () => Navigator.pop(sheet, 'profile'),
             ),
+            const Divider(),
+            const _SheetSection('Ajustes'),
             ListTile(
               leading: const IconTile(icon: Icons.dark_mode_outlined, color: AppColors.tealDark, size: 36),
               title: const Text('Tema'),
@@ -300,35 +297,52 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
               subtitle: Text(ref.read(motivationProvider).taste?.label ?? 'Sin elegir'),
               onTap: () => Navigator.pop(sheet, 'quotes'),
             ),
-            ListTile(
-              leading: const IconTile(icon: Icons.bubble_chart_outlined, color: AppColors.teal, size: 36),
-              title: const Text('Burbuja sobre otras apps'),
-              subtitle: Text(ref.read(overlayBubbleProvider) ? 'Activada' : 'Desactivada'),
-              onTap: () => Navigator.pop(sheet, 'bubble'),
-            ),
-            ListTile(
-              leading: IconTile(icon: Icons.info_outline, color: Theme.of(sheet).colorScheme.tertiary, size: 36),
-              title: const Text('Créditos de imágenes'),
-              onTap: () => Navigator.pop(sheet, 'credits'),
-            ),
-            ListTile(
-              leading: const IconTile(icon: Icons.save_alt, color: AppColors.teal, size: 36),
-              title: const Text('Guardar copia de seguridad'),
-              subtitle: const Text('Racha, historial, rutina y ajustes en un archivo'),
-              onTap: () => Navigator.pop(sheet, 'backup'),
-            ),
-            ListTile(
-              leading: const IconTile(icon: Icons.restore, color: AppColors.orange, size: 36),
-              title: const Text('Restaurar copia'),
-              subtitle: const Text('Recupera tus datos desde un archivo de copia'),
-              onTap: () => Navigator.pop(sheet, 'restore'),
-            ),
             const Divider(),
-            ListTile(
-              leading: IconTile(icon: Icons.delete_forever_outlined, color: Theme.of(sheet).colorScheme.error, size: 36),
-              title: Text('Borrar todos los datos', style: TextStyle(color: Theme.of(sheet).colorScheme.error)),
-              subtitle: const Text('Empezar de cero como recién instalada'),
-              onTap: () => Navigator.pop(sheet, 'wipe'),
+            // Permissions, backups, credits and the like: out of the way.
+            ExpansionTile(
+              leading: const IconTile(icon: Icons.more_horiz, color: AppColors.muted, size: 36),
+              title: const Text('Más opciones'),
+              subtitle: const Text('Burbuja, cuenta, copias de seguridad, créditos…'),
+              shape: const Border(),
+              collapsedShape: const Border(),
+              children: [
+                ListTile(
+                  leading: const IconTile(icon: Icons.bubble_chart_outlined, color: AppColors.teal, size: 36),
+                  title: const Text('Burbuja sobre otras apps'),
+                  subtitle: Text(ref.read(overlayBubbleProvider) ? 'Activada' : 'Desactivada'),
+                  onTap: () => Navigator.pop(sheet, 'bubble'),
+                ),
+                ListTile(
+                  leading: const IconTile(icon: Icons.alternate_email, color: AppColors.tealDark, size: 36),
+                  title: const Text('Cuenta'),
+                  subtitle: const Text('Email opcional para no perder tu rutina publicada'),
+                  onTap: () => Navigator.pop(sheet, 'account'),
+                ),
+                ListTile(
+                  leading: const IconTile(icon: Icons.save_alt, color: AppColors.teal, size: 36),
+                  title: const Text('Guardar copia de seguridad'),
+                  subtitle: const Text('Racha, historial, rutina y ajustes en un archivo'),
+                  onTap: () => Navigator.pop(sheet, 'backup'),
+                ),
+                ListTile(
+                  leading: const IconTile(icon: Icons.restore, color: AppColors.orange, size: 36),
+                  title: const Text('Restaurar copia'),
+                  subtitle: const Text('Recupera tus datos desde un archivo de copia'),
+                  onTap: () => Navigator.pop(sheet, 'restore'),
+                ),
+                ListTile(
+                  leading: IconTile(icon: Icons.info_outline, color: Theme.of(sheet).colorScheme.tertiary, size: 36),
+                  title: const Text('Créditos de imágenes'),
+                  onTap: () => Navigator.pop(sheet, 'credits'),
+                ),
+                const Divider(),
+                ListTile(
+                  leading: IconTile(icon: Icons.delete_forever_outlined, color: Theme.of(sheet).colorScheme.error, size: 36),
+                  title: Text('Borrar todos los datos', style: TextStyle(color: Theme.of(sheet).colorScheme.error)),
+                  subtitle: const Text('Empezar de cero como recién instalada'),
+                  onTap: () => Navigator.pop(sheet, 'wipe'),
+                ),
+              ],
             ),
           ],
         ),
@@ -807,4 +821,26 @@ class _CreditsDialog extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Small heading that separates the groups of the options sheet.
+class _SheetSection extends StatelessWidget {
+  /// Creates the heading.
+  const _SheetSection(this.label);
+
+  /// Heading text.
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+        child: Text(
+          label.toUpperCase(),
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                letterSpacing: 1.1,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+      );
 }
