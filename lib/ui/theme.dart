@@ -123,7 +123,12 @@ ThemeData buildAppTheme(Brightness brightness) {
       selectedColor: p.accent,
       secondarySelectedColor: p.accent,
       checkmarkColor: Colors.white,
-      labelStyle: text.bodyMedium?.copyWith(color: p.ink),
+      // Selected chips use the dark accent: their label turns white.
+      labelStyle: text.bodyMedium?.copyWith(
+        color: WidgetStateColor.resolveWith(
+          (s) => s.contains(WidgetState.selected) ? Colors.white : p.ink,
+        ),
+      ),
       secondaryLabelStyle: text.bodyMedium?.copyWith(color: Colors.white),
       side: BorderSide(color: p.line),
       shape: rounded,

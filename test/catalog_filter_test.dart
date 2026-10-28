@@ -39,4 +39,12 @@ void main() {
     const f = CatalogFilter(query: 'push-up');
     expect(all.where(f.matches), isNotEmpty);
   });
+
+  test('buscar un músculo en español da lo mismo que el filtro', () {
+    final byText = all.where(const CatalogFilter(query: 'abdominales').matches).toSet();
+    final byChip = all.where(const CatalogFilter(muscle: 'abdominals').matches).toSet();
+    expect(byText.containsAll(byChip), isTrue);
+    // Sin tilde también vale, y se combinan palabras.
+    expect(all.where(const CatalogFilter(query: 'biceps mancuernas').matches), isNotEmpty);
+  });
 }

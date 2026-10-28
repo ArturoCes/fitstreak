@@ -71,9 +71,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   /// Whether the current step is complete.
   bool get _canContinue => switch (_step) {
         0 => _sex != null &&
-            _inRange(_ageValue, 14, 99) &&
-            _inRange(_heightValue, 120, 230) &&
-            _inRange(_weightValue, 30, 300),
+            _inRange(_ageValue, _minAge, _maxAge) &&
+            _inRange(_heightValue, _minHeight, _maxHeight) &&
+            _inRange(_weightValue, _minWeight, _maxWeight),
         1 => _goal != null && _level != null,
         2 => true,
         3 => _place != null,
@@ -82,6 +82,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       };
 
   /// Whether [v] is set and within [min]..[max].
+  static const _minAge = 14, _maxAge = 99;
+  static const _minHeight = 120, _maxHeight = 230;
+  static const _minWeight = 30, _maxWeight = 300;
+
   static bool _inRange(num? v, num min, num max) =>
       v != null && v >= min && v <= max;
 
@@ -99,7 +103,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Future<void> _next() async {
     if (_step < _stepCount - 1) {
       setState(() => _step++);
-      await _pages.nextPage(
+      // To the step's page, not "the next one": two quick taps would leave
+      // the page behind the step counter.
+      await _pages.animateToPage(
+        _step,
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
@@ -141,7 +148,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   /// Previous step.
   void _back() {
     setState(() => _step--);
-    _pages.previousPage(
+    _pages.animateToPage(
+      _step,
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeOut,
     );
@@ -213,13 +221,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
-          _NumberField(controller: _age, label: 'Edad', suffix: 'años'),
-          _NumberField(controller: _height, label: 'Altura', suffix: 'cm'),
+          _NumberField(controller: _age, label: 'Edad', suffix: 'años', min: _minAge, max: _maxAge),
+          _NumberField(controller: _height, label: 'Altura', suffix: 'cm', min: _minHeight, max: _maxHeight),
           _NumberField(
             controller: _weight,
             label: 'Peso',
             suffix: 'kg',
             decimal: true,
+            min: _minWeight,
+            max: _maxWeight,
           ),
         ],
       );
@@ -412,13 +422,16 @@ class _StepList extends StatelessWidget {
   }
 }
 
-/// Numeric text field with a unit suffix.
+/// Numeric text field with a unit suffix. Says so when the typed value is
+/// out of [min]..[max].
 class _NumberField extends StatelessWidget {
   /// Creates the field.
   const _NumberField({
     required this.controller,
     required this.label,
     required this.suffix,
+    required this.min,
+    required this.max,
     this.decimal = false,
   });
 
@@ -434,6 +447,19 @@ class _NumberField extends StatelessWidget {
   /// Allows decimals (comma or dot).
   final bool decimal;
 
+  /// Smallest valid value.
+  final int min;
+
+  /// Largest valid value.
+  final int max;
+
+  /// Something was typed and it is not a valid value.
+  bool get _outOfRange {
+    if (controller.text.isEmpty) return false;
+    final v = num.tryParse(controller.text.replaceAll(',', '.'));
+    return v == null || v < min || v > max;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -443,9 +469,12 @@ class _NumberField extends StatelessWidget {
         keyboardType: TextInputType.numberWithOptions(decimal: decimal),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(decimal ? r'[0-9.,]' : r'[0-9]')),
+          // Three digits, plus one decimal for the weight ("72,5").
+          LengthLimitingTextInputFormatter(decimal ? 5 : 3),
         ],
         decoration: InputDecoration(
           labelText: label,
+          errorText: _outOfRange ? 'Entre $min y $max $suffix' : null,
           suffixText: suffix,
           border: const OutlineInputBorder(),
         ),
@@ -487,7 +516,15 @@ class _Choice extends StatelessWidget {
       color: selected ? scheme.primaryContainer : null,
       child: ListTile(
         leading: icon == null ? null : Icon(icon),
-        title: Text(label),
+        // Beside an icon in a half-width card: shrink instead of breaking
+        // the word ("Gimnasi/o").
+        title: icon == null
+            ? Text(label)
+            : FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(label, maxLines: 1),
+              ),
         subtitle: subtitle == null ? null : Text(subtitle!),
         // With an icon it sits in a narrow row: the color shows the selection.
         trailing: selected && icon == null ? const Icon(Icons.check_circle) : null,

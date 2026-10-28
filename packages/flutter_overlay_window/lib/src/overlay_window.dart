@@ -8,7 +8,9 @@ import 'package:flutter_overlay_window/src/overlay_config.dart';
 class FlutterOverlayWindow {
   FlutterOverlayWindow._();
 
-  static final StreamController _controller = StreamController();
+  // Broadcast: the app listens again after an in-app restart (restoring a
+  // backup or wiping the data), and a single-subscription stream throws.
+  static final StreamController _controller = StreamController.broadcast();
   static const MethodChannel _channel =
       MethodChannel("x-slayer/overlay_channel");
   static const MethodChannel _overlayChannel =

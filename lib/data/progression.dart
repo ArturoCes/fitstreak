@@ -18,6 +18,15 @@ const _weightedEquipment = {
 /// Whether [e] is loaded, so the workout asks for kilograms.
 bool usesWeight(Exercise e) => _weightedEquipment.contains(e.equipmentOrBody);
 
+/// Most reps a set can log.
+const maxSetReps = 100;
+
+/// Longest timed hold a set can log, in seconds.
+const maxHoldSeconds = 600;
+
+/// Heaviest weight a set can log, in kg.
+const maxSetKg = 500.0;
+
 /// Timed holds (plank...): seconds are logged instead of reps.
 bool isTimed(RoutineItem item) => item.reps.contains('s');
 

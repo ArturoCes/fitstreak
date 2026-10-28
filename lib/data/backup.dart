@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../features/workout/workout_bubble.dart';
 import 'active_workout.dart';
 import 'app_state.dart';
 import 'reset.dart';
@@ -106,5 +107,7 @@ Future<void> pickAndRestoreBackup(BuildContext context, WidgetRef ref) async {
     }
     return;
   }
+  // The old tree's open popups never report closing.
+  popupObserver.open.value = 0;
   if (context.mounted) AppRestarter.restart(context);
 }

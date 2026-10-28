@@ -68,6 +68,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     final plan = planSets(item, ex, lastSession(ref.watch(workoutLogsProvider), item.exerciseId));
     final weighted = usesWeight(ex);
     final timed = isTimed(item);
+    final maxReps = timed ? maxHoldSeconds : maxSetReps;
     final sets = w.sets[w.exercise];
     final setIndex = _editing ?? w.currentSet;
     final restLeft = w.restLeft(now);
@@ -235,11 +236,19 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
                       onMinus: sets[setIndex].reps > 1
                           ? () => _update(w.exercise, setIndex, reps: sets[setIndex].reps - 1)
                           : null,
-                      onPlus: () => _update(w.exercise, setIndex, reps: sets[setIndex].reps + 1),
-                      onEdit: () => _editValue(timed ? 'Segundos' : 'Repeticiones', '${sets[setIndex].reps}', (v) {
-                        final n = int.tryParse(v);
-                        if (n != null && n > 0) _update(w.exercise, setIndex, reps: n);
-                      }),
+                      onPlus: sets[setIndex].reps < maxReps
+                          ? () => _update(w.exercise, setIndex, reps: sets[setIndex].reps + 1)
+                          : null,
+                      onEdit: () => _editValue(
+                        timed ? 'Segundos' : 'Repeticiones',
+                        '${sets[setIndex].reps}',
+                        maxLength: 3,
+                        decimal: false,
+                        (v) {
+                          final n = int.tryParse(v);
+                          if (n != null && n > 0) _update(w.exercise, setIndex, reps: n.clamp(1, maxReps));
+                        },
+                      ),
                     ),
                   ),
                   if (weighted)
@@ -251,10 +260,13 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
                             ? () => _update(w.exercise, setIndex,
                                 kg: ((sets[setIndex].kg ?? 0) - weightStep(ex)).clamp(0, 999).toDouble())
                             : null,
-                        onPlus: () => _update(w.exercise, setIndex, kg: (sets[setIndex].kg ?? 0) + weightStep(ex)),
-                        onEdit: () => _editValue('Peso (kg)', formatKg(sets[setIndex].kg ?? 0), (v) {
+                        onPlus: (sets[setIndex].kg ?? 0) < maxSetKg
+                            ? () => _update(w.exercise, setIndex,
+                                kg: ((sets[setIndex].kg ?? 0) + weightStep(ex)).clamp(0, maxSetKg).toDouble())
+                            : null,
+                        onEdit: () => _editValue('Peso (kg)', formatKg(sets[setIndex].kg ?? 0), maxLength: 5, (v) {
                           final n = double.tryParse(v.replaceAll(',', '.'));
-                          if (n != null && n >= 0) _update(w.exercise, setIndex, kg: n);
+                          if (n != null && n >= 0) _update(w.exercise, setIndex, kg: n.clamp(0, maxSetKg).toDouble());
                         }),
                       ),
                     ),
@@ -533,7 +545,13 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   }
 
   /// Dialog to type a number (reps or kg) instead of using the buttons.
-  Future<void> _editValue(String title, String initial, ValueChanged<String> onSave) async {
+  Future<void> _editValue(
+    String title,
+    String initial,
+    ValueChanged<String> onSave, {
+    int maxLength = 5,
+    bool decimal = true,
+  }) async {
     final controller = TextEditingController(text: initial);
     final value = await showDialog<String>(
       context: context,
@@ -542,8 +560,11 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
         content: TextField(
           controller: controller,
           autofocus: true,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+          keyboardType: TextInputType.numberWithOptions(decimal: decimal),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(decimal ? r'[0-9.,]' : r'[0-9]')),
+            LengthLimitingTextInputFormatter(maxLength),
+          ],
           onSubmitted: (v) => Navigator.pop(c, v),
         ),
         actions: [
@@ -1027,8 +1048,8 @@ class _BigStepper extends StatelessWidget {
   /// Decreases it (null = at the minimum).
   final VoidCallback? onMinus;
 
-  /// Increases it.
-  final VoidCallback onPlus;
+  /// Increases it (null = at the maximum).
+  final VoidCallback? onPlus;
 
   /// Opens the typing dialog.
   final VoidCallback onEdit;
