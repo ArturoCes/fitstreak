@@ -414,7 +414,8 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   /// Stops the hold timer and saves the [seconds] held as the set's reps.
   void _stopHold(int exercise, int set, int seconds) {
     setState(() => _holdStart = null);
-    if (seconds > 0) _update(exercise, set, reps: seconds);
+    // A timer left running doesn't log an hour-long plank.
+    if (seconds > 0) _update(exercise, set, reps: seconds.clamp(1, maxHoldSeconds));
   }
 
   /// Leaves without pausing. The first time it offers the bubble over other
